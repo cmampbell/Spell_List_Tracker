@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from models import db, connect_db, User
-from forms import UserSignUpForm
+from forms import UserSignUpForm, UserLoginForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -82,6 +82,34 @@ def signup():
 
     else:
         return render_template('users/signup.html', form=form)
+    
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login."""
+
+    form = UserLoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data,
+                                 form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
+
+    return render_template('users/login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    """Handle logout of user."""
+
+    do_logout()
+    flash("Successfully logged out!")
+    return redirect('/')
     
 @app.route('/')
 def show_home_page():
