@@ -44,7 +44,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    # characters = db.relationship('Character', cascade="all,delete") 
+    characters = db.relationship('Character', cascade="all,delete") 
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -85,3 +85,70 @@ class User(db.Model):
                 return user
 
         return False
+    
+class Character(db.Model):
+    '''DnD Character Model for users'''
+
+    __tablename__ = 'characters'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+    )
+
+    # foreign key to users table
+    user_id = db.Column(
+        db.Text,
+        nullable=False,
+        unique=True,
+    )
+
+    char_name = db.Column(
+        db.Text,
+        nullable=False,
+        unique=True,
+    )
+
+    race = db.Column(
+        db.Text,
+        nullable=False,
+    )
+
+    HP = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    STR = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    DEX = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    CON = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    INT = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    WIS = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    CHA = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    # db.relationship('Char_Classes', cascade="all,delete")
+
+    # db.relationship('spell_lists', cascade="all,delete")

@@ -7,6 +7,9 @@
 
 {% if user %} 
     <h2>Logged in!!!!</h2>
+    <form action="/character/new">
+        <input type="submit" value="Create your character!">
+    </form>
 
 {% else %} 
 <form action="/signup">
