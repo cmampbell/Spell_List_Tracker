@@ -12,8 +12,6 @@ class ModelForm(BaseModelForm):
     def get_session(self):
         return db.session
 
-
-#Create form with password and confirm password fields
 class UserSignUpForm(FlaskForm):
     """Sign up form for Users."""
     username = StringField('Username', [validators.Length(min=4, max=25)])
