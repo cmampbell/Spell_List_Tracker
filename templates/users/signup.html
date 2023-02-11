@@ -4,7 +4,6 @@
 
 {% block content %}
 
-<!-- create form with password and confirm password fields -->
 <form method="POST" id="user_form">
     {{ form.hidden_tag() }}
 
@@ -17,7 +16,7 @@
 
     {% endfor %}
 
-    <button>Register!</button>
+    <input type="submit" value="Register!">
 </form>
 
 {% endblock %}
