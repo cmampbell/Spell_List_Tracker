@@ -184,5 +184,5 @@ def show_char_details(char_id):
 
     char = db.session.get(Character, char_id)
 
-    return render_template('char/char_details.html', user=g.user, char=char, owner=owner)
+    return render_template('char/char_details.html', user=g.user, char=char, stats=char.stats[0], owner=owner)
     

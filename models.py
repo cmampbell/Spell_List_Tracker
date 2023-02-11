@@ -108,6 +108,7 @@ class Character(db.Model):
         unique=True,
     )
 
+    # Write method that returns a dict of stats
     stats = db.relationship('Stats', cascade="all, delete-orphan", passive_deletes=True)
 
     classes = db.relationship('Char_Class', cascade="all, delete-orphan", passive_deletes=True)
@@ -118,6 +119,9 @@ class Stats(db.Model):
     '''Model for character stats'''
 
     __tablename__='stats'
+
+    def __repr__(self):
+        return f"<User #{self.char_id}: HP:{self.HP}, STR:{self.STR}, DEX:{self.DEX}, CON:{self.CON}, INT:{self.INT}, WIS:{self.WIS}, CHA:{self.CHA}>"
 
     char_id = db.Column(
         db.Integer,
