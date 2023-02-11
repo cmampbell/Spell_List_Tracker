@@ -3,7 +3,7 @@
 from wtforms import StringField, PasswordField, validators
 from flask_wtf import FlaskForm
 from wtforms_alchemy import model_form_factory, ModelFormField
-from models import db, Character, Stats
+from models import db, Character, Stats, Char_Class
 
 BaseModelForm = model_form_factory(FlaskForm)
 
@@ -36,6 +36,6 @@ class ClassModelForm(CharacterModelForm):
     class Meta:
         model = Char_Class
 
-class StatsModelForm(ClassModelForm):
+class CharacterCreationForm(ClassModelForm):
     class Meta:
         model = Stats

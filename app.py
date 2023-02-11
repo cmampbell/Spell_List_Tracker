@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from models import db, connect_db, User, Character
+from models import db, connect_db, User, Character, Stats, Char_Class
 from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm
 
 
@@ -144,17 +144,27 @@ def show_character_form():
         user = db.session.get(User, g.user.id)
 
         char = Character(
-            name=form.data['name'],
-            race=form.data['race'],
-            HP=form.data['HP'],
-            STR=form.data['STR'],
-            DEX=form.data['DEX'],
-            CON=form.data['CON'],
-            INT=form.data['INT'],
-            WIS=form.data['WIS'],
-            CHA=form.data['CHA']
+            name=form.data['name']
         )
 
+        stats = Stats(
+            HP = form.data['HP'],
+            STR = form.data['STR'],
+            DEX = form.data['DEX'],
+            CON = form.data['CON'],
+            INT = form.data['INT'],
+            WIS = form.data['WIS'],
+            CHA = form.data['CHA']
+        )
+
+        _class = Char_Class(
+            class_name = form.data['class_name'],
+            subclass_name = form.data['subclass_name'],
+            level = form.data['level']
+        )
+
+        char.stats.append(stats)
+        char.classes.append(_class)
         user.characters.append(char)
 
         db.session.commit()

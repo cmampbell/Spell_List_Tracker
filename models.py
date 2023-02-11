@@ -44,7 +44,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    characters = db.relationship('Character', cascade="all,delete") 
+    characters = db.relationship('Character', cascade="all, delete-orphan", passive_deletes=True) 
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -108,16 +108,16 @@ class Character(db.Model):
         unique=True,
     )
 
-    db.relationship('Stats', cascade="all,delete")
+    stats = db.relationship('Stats', cascade="all, delete-orphan", passive_deletes=True)
 
-    # db.relationship('Char_Classes', cascade="all,delete")
+    classes = db.relationship('Char_Class', cascade="all, delete-orphan", passive_deletes=True)
 
     # db.relationship('spell_lists', cascade="all,delete")
 
 class Stats(db.Model):
     '''Model for character stats'''
 
-    __tablename__='Stats'
+    __tablename__='stats'
 
     char_id = db.Column(
         db.Integer,
