@@ -1,2 +1,17 @@
 {% extends 'base.html' %} 
 
+{% block title %}Spell Tracker{% endblock %} 
+
+{% block content %} 
+<h1>Home Page!</h1>
+
+{% if user %} 
+    <h2>Logged in!!!!</h2>
+
+{% else %} 
+<form action="/signup">
+    <input type="submit" value="Sign Up!">
+</form>
+{% endif %}
+
+{% endblock %}

@@ -44,7 +44,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    characterss = db.relationship('Character', cascade="all,delete") 
+    # characters = db.relationship('Character', cascade="all,delete") 
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
