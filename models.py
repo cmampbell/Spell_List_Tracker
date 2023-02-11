@@ -96,11 +96,10 @@ class Character(db.Model):
         primary_key=True,
     )
 
-    # foreign key to users table
     user_id = db.Column(
-        db.Text,
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='CASCADE'),
         nullable=False,
-        unique=True,
     )
 
     char_name = db.Column(

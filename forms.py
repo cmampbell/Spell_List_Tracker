@@ -3,7 +3,7 @@
 from wtforms import StringField, PasswordField, validators
 from flask_wtf import FlaskForm
 from wtforms_alchemy import model_form_factory
-from models import db, User
+from models import db, Character
 
 BaseModelForm = model_form_factory(FlaskForm)
 
@@ -27,3 +27,7 @@ class UserLoginForm(FlaskForm):
     '''Login for for Users.'''
     username = StringField('Username', [validators.DataRequired()])
     password = PasswordField('Password', [validators.DataRequired()])
+
+class CharacterCreationForm(ModelForm):
+    class Meta:
+        model = Character
