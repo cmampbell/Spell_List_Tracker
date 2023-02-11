@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}{{char.name}} Characters{% endblock %}
+
+{% block content %}
+<h1>{{char.name}}</h1>
+
+<h2>Stats</h2>
+
+<form action="/characters/edit">
+    <input type="submit" value="Edit this character!">
+</form>
+
+{% endblock %}

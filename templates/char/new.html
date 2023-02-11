@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<form method="POST" id="char_form">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        {% for error in field.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+
+        {{ field(placeholder=field.label.text) }}
+
+    {% endfor %}
+
+    <input type="submit" value="Create Character!">
+</form>
+
+{% endblock %}
