@@ -162,3 +162,29 @@ class Stats(db.Model):
 
 class Char_Class(db.Model):
     '''Model for game classes for characters'''
+
+    __tablename__ = 'char_classes'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    char_id = db.Column(
+        db.Integer,
+        db.ForeignKey('characters.id', ondelete='CASCADE')
+    )
+
+    class_name = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    subclass_name = db.Column(
+        db.Text
+    )
+
+    level = db.Column(
+        db.Integer,
+        nullable=False
+    )
