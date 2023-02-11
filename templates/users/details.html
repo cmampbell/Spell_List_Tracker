@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{user.username}} Characters{% endblock %}
+
+{% block content %}
+<h1>{{user.username}} Characters</h1>
+
+<form action="/characters/new">
+    <input type="submit" value="Create a character!">
+</form>
+
+{% endblock %}

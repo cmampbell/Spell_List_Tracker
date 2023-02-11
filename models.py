@@ -28,19 +28,19 @@ class User(db.Model):
     )
 
     email = db.Column(
-        db.Text,
+        db.String,
         nullable=False,
         unique=True,
     )
 
     username = db.Column(
-        db.Text,
+        db.String,
         nullable=False,
         unique=True,
     )
 
     password = db.Column(
-        db.Text,
+        db.String,
         nullable=False,
     )
 
@@ -102,15 +102,29 @@ class Character(db.Model):
         nullable=False,
     )
 
-    char_name = db.Column(
-        db.Text,
+    name = db.Column(
+        db.String,
         nullable=False,
         unique=True,
     )
 
     race = db.Column(
-        db.Text,
+        db.String,
         nullable=False,
+    )
+
+    #NEED TO BREAK OUT STATS INTO THEIR OWN TABLE
+
+    # db.relationship('Char_Classes', cascade="all,delete")
+
+    # db.relationship('spell_lists', cascade="all,delete")
+
+class Stats(db.Model):
+    '''Model for character stats'''
+    char_id = db.Column(
+        db.Integer,
+        db.ForeignKey('characters.id', ondelete='CASCADE'),
+        primary_key=True
     )
 
     HP = db.Column(
@@ -147,7 +161,3 @@ class Character(db.Model):
         db.Integer,
         nullable=False
     )
-
-    # db.relationship('Char_Classes', cascade="all,delete")
-
-    # db.relationship('spell_lists', cascade="all,delete")

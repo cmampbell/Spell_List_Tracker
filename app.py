@@ -4,8 +4,8 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from models import db, connect_db, User
-from forms import UserSignUpForm, UserLoginForm
+from models import db, connect_db, User, Character
+from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm
 
 
 CURR_USER_KEY = "curr_user"
@@ -97,9 +97,9 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
-            return redirect("/")
+            return redirect(f"/user/{user.id}")
 
-        flash("Invalid credentials.", 'danger')
+        flash("Invalid credentials.")
 
     return render_template('users/login.html', form=form)
 
@@ -111,7 +111,68 @@ def logout():
     do_logout()
     flash("Successfully logged out!")
     return redirect('/')
+
+###################### USER VIEWS ##########################
     
 @app.route('/')
 def show_home_page():
     return render_template('home.html', user=g.user)
+
+@app.route('/user/<int:user_id>')
+def show_user_page(user_id):
+    '''Take user to their profile page'''
+
+    if g.user.id != user_id:
+        flash("You can't access this page")
+        redirect('/')
+
+    return render_template('users/details.html', user=g.user)
+
+################### CHARACTER VIEWS #########################
+
+@app.route('/characters/new', methods=['GET', 'POST'])
+def show_character_form():
+    '''Renders character form, or creates new character if form validates'''
+
+    if not g.user:
+        flash("You can't access this page")
+        redirect('/')
+
+    form = CharacterCreationForm()
+
+    if form.validate_on_submit():
+        user = db.session.get(User, g.user.id)
+
+        char = Character(
+            name=form.data['name'],
+            race=form.data['race'],
+            HP=form.data['HP'],
+            STR=form.data['STR'],
+            DEX=form.data['DEX'],
+            CON=form.data['CON'],
+            INT=form.data['INT'],
+            WIS=form.data['WIS'],
+            CHA=form.data['CHA']
+        )
+
+        user.characters.append(char)
+
+        db.session.commit()
+
+        return redirect(f'/char/{char.id}')
+
+    return render_template('char/new.html', form=form)
+
+@app.route('/char/<int:char_id>')
+def show_char_details(char_id):
+    '''Show the character details page'''
+    #Check if the current user is the owner of this character
+    # Might move this to jinja template
+
+    if char_id in [char.id for char in g.user.characters]:
+        owner = True
+
+    char = db.session.get(Character, char_id)
+
+    return render_template('char/char_details.html', user=g.user, char=char, owner=owner)
+    

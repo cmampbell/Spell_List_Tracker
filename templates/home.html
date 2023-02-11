@@ -5,16 +5,8 @@
 {% block content %} 
 <h1>Home Page!</h1>
 
-{% if user %} 
-    <h2>Logged in!!!!</h2>
-    <form action="/character/new">
-        <input type="submit" value="Create your character!">
-    </form>
-
-{% else %} 
 <form action="/signup">
     <input type="submit" value="Register!">
 </form>
-{% endif %}
 
 {% endblock %}
