@@ -108,12 +108,7 @@ class Character(db.Model):
         unique=True,
     )
 
-    race = db.Column(
-        db.String,
-        nullable=False,
-    )
-
-    #NEED TO BREAK OUT STATS INTO THEIR OWN TABLE
+    db.relationship('Stats', cascade="all,delete")
 
     # db.relationship('Char_Classes', cascade="all,delete")
 
@@ -121,6 +116,9 @@ class Character(db.Model):
 
 class Stats(db.Model):
     '''Model for character stats'''
+
+    __tablename__='Stats'
+
     char_id = db.Column(
         db.Integer,
         db.ForeignKey('characters.id', ondelete='CASCADE'),
@@ -161,3 +159,6 @@ class Stats(db.Model):
         db.Integer,
         nullable=False
     )
+
+class Char_Class(db.Model):
+    '''Model for game classes for characters'''
