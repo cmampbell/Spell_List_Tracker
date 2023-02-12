@@ -12,6 +12,9 @@
         <a href="/signup">Signup</a>
         <a href="/logout">Logout</a>
         <a href="/">Home</a>
+        {% if user %}
+            <a href="/user/{{user.id}}">{{user.username}}</a>
+        {% endif %}
     </nav>
     {% block content %}CONTENT GOES HERE{% endblock %}
 </body>

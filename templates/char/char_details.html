@@ -5,19 +5,15 @@
 {% block content %}
 <h1>{{char.name}}</h1>
 
-<h2>Stats</h2>
-
-<ul>
-    {% for stat in stats %}
-    <li>{{stat}}</li>
+<h2>Class</h2>
+    {% for _class in char.get_classes() %}
+    <li>Level {{_class.level}} {{_class.class_name}}</li>
     {% endfor %}
-    <!-- <li>HP: {{char.stats[0].HP}}</li>
-    <li>STR: {{char.stats[0].STR}}</li>
-    <li>DEX: {{char.stats[0].DEX}}</li>
-    <li>CON: {{char.stats[0].CON}}</li>
-    <li>INT: {{char.stats[0].INT}}</li>
-    <li>WIS: {{char.stats[0].WIS}}</li>
-    <li>CHA: {{char.stats[0].CHA}}</li> -->
+<h2>Stats</h2>
+<ul>
+    {% for key, value in stats %}
+    <li>{{key}} {{value}}</li>
+    {% endfor %}
 </ul>
 <form action="/characters/edit">
     <input type="submit" value="Edit this character!">

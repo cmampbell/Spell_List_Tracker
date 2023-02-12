@@ -108,10 +108,13 @@ class Character(db.Model):
         unique=True,
     )
 
-    # Write method that returns a dict of stats
     stats = db.relationship('Stats', cascade="all, delete-orphan", passive_deletes=True)
 
     classes = db.relationship('Char_Class', cascade="all, delete-orphan", passive_deletes=True)
+
+    def get_classes(self):
+        '''Returns a list of classes for this character'''
+        return [_class for _class in self.classes]
 
     # db.relationship('spell_lists', cascade="all,delete")
 
@@ -163,6 +166,18 @@ class Stats(db.Model):
         db.Integer,
         nullable=False
     )
+
+    def serialize_stats(self):
+        '''Returns a dict of stats'''
+        return {
+            'HP:': self.HP,
+            'STR:': self.STR,
+            'DEX:': self.DEX,
+            'CON:': self.CON,
+            'INT:': self.INT,
+            'WIS:': self.WIS,
+            'CHA:': self.CHA
+        }
 
 class Char_Class(db.Model):
     '''Model for game classes for characters'''

@@ -5,6 +5,12 @@
 {% block content %}
 <h1>{{user.username}} Characters</h1>
 
+<ul>
+    {% for char in chars %}
+        <li><a href="/char/{{char.id}}">{{char.name}}</a></li>
+    {% endfor %}
+</ul>
+
 <form action="/characters/new">
     <input type="submit" value="Create a character!">
 </form>

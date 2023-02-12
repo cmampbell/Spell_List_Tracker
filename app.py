@@ -19,9 +19,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['DEBUG'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-# toolbar = DebugToolbarExtension(app)
+toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -116,7 +117,13 @@ def logout():
     
 @app.route('/')
 def show_home_page():
-    return render_template('home.html', user=g.user)
+
+    if g.user:
+        user = g.user
+
+    else:
+        user = None
+    return render_template('home.html', user=user)
 
 @app.route('/user/<int:user_id>')
 def show_user_page(user_id):
@@ -126,7 +133,7 @@ def show_user_page(user_id):
         flash("You can't access this page")
         redirect('/')
 
-    return render_template('users/details.html', user=g.user)
+    return render_template('users/details.html', user=g.user, chars=g.user.characters)
 
 ################### CHARACTER VIEWS #########################
 
@@ -184,5 +191,7 @@ def show_char_details(char_id):
 
     char = db.session.get(Character, char_id)
 
-    return render_template('char/char_details.html', user=g.user, char=char, stats=char.stats[0], owner=owner)
+    stats = char.stats[0].serialize_stats().items()
+
+    return render_template('char/char_details.html', user=g.user, char=char, stats=stats, owner=owner)
     
