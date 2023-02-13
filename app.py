@@ -186,7 +186,8 @@ def show_char_details(char_id):
     #Check if the current user is the owner of this character
     # Might move this to jinja template
 
-    if char_id in [char.id for char in g.user.characters]:
+    owner = False
+    if g.user and char_id in [char.id for char in g.user.characters]:
         owner = True
 
     char = db.session.get(Character, char_id)
@@ -194,4 +195,22 @@ def show_char_details(char_id):
     stats = char.stats[0].serialize_stats().items()
 
     return render_template('char/char_details.html', user=g.user, char=char, stats=stats, owner=owner)
+
+@app.route('/char/<int:char_id>/edit', methods=['GET', 'POST'])
+def char_edit_form(char_id):
+    '''Show form to edit a chracter
+    Might change this later to be a front-end thing'''
+
+    char = db.session.get(Character, char_id)
+
+    form = CharacterCreationForm(obj=char)
+
+    if g.user.id != char.user_id:
+        flash("You don't have permission to view this page")
+        return redirect(f'/char/{char_id}')
+
+    if form.validate_on_submit():
+        return redirect(f'/char/{char_id}')
+
+    return render_template('char/char_edit.html', char=char, form=form)
     

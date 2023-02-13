@@ -195,12 +195,12 @@ class Char_Class(db.Model):
     )
 
     class_name = db.Column(
-        db.Text,
+        db.String,
         nullable=False
     )
 
     subclass_name = db.Column(
-        db.Text
+        db.String
     )
 
     level = db.Column(

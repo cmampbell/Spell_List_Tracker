@@ -15,8 +15,8 @@
     <li>{{key}} {{value}}</li>
     {% endfor %}
 </ul>
-<form action="/char/{{char.id}}/edit">
-    <input type="submit" value="Edit this character!">
-</form>
+{% if owner %}
+<a href="/char/{{char.id}}/edit">Edit this character!</a>
+{% endif %}
 
 {% endblock %}
