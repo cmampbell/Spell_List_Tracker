@@ -210,10 +210,6 @@ def char_edit_form(char_id):
         return redirect(f'/char/{char_id}')
 
     if form.validate_on_submit():
-        # get the form data
-
-        # get char, stats object, and char_class object
-        # set attributes on those objects
 
         char.name = form.data['name']
         form.populate_obj(char.stats[0])
