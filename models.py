@@ -116,6 +116,20 @@ class Character(db.Model):
         '''Returns a list of classes for this character'''
         return [_class for _class in self.classes]
 
+    def serialize_character(self):
+        '''Returns a dict of all necessary fields for character form'''
+        #need to have name from chacter
+        #each individual stat in a dict
+        #each class in a dict
+        char = self.stats[0].serialize_stats()
+
+        char['name'] = self.name
+        char['class_name'] = self.get_classes()[0].class_name
+        char['subclass_name'] = self.get_classes()[0].subclass_name
+        char['level'] = self.get_classes()[0].level
+
+        return char
+
     # db.relationship('spell_lists', cascade="all,delete")
 
 class Stats(db.Model):
@@ -170,13 +184,13 @@ class Stats(db.Model):
     def serialize_stats(self):
         '''Returns a dict of stats'''
         return {
-            'HP:': self.HP,
-            'STR:': self.STR,
-            'DEX:': self.DEX,
-            'CON:': self.CON,
-            'INT:': self.INT,
-            'WIS:': self.WIS,
-            'CHA:': self.CHA
+            'HP': self.HP,
+            'STR': self.STR,
+            'DEX': self.DEX,
+            'CON': self.CON,
+            'INT': self.INT,
+            'WIS': self.WIS,
+            'CHA': self.CHA
         }
 
 class Char_Class(db.Model):

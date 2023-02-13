@@ -203,7 +203,9 @@ def char_edit_form(char_id):
 
     char = db.session.get(Character, char_id)
 
-    form = CharacterCreationForm(obj=char)
+    data=char.serialize_character()
+
+    form = CharacterCreationForm(data=data)
 
     if g.user.id != char.user_id:
         flash("You don't have permission to view this page")
