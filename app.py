@@ -203,15 +203,26 @@ def char_edit_form(char_id):
 
     char = db.session.get(Character, char_id)
 
-    data=char.serialize_character()
-
-    form = CharacterCreationForm(data=data)
+    form = CharacterCreationForm(data=char.serialize_character())
 
     if g.user.id != char.user_id:
         flash("You don't have permission to view this page")
         return redirect(f'/char/{char_id}')
 
     if form.validate_on_submit():
+        # get the form data
+
+        # get char, stats object, and char_class object
+        # set attributes on those objects
+
+        char.name = form.data['name']
+        form.populate_obj(char.stats[0])
+        form.populate_obj(char.classes[0])
+
+        db.session.add(char)
+        db.session.commit()
+
+        flash(f'Succesfully Updated {char.name}')
         return redirect(f'/char/{char_id}')
 
     return render_template('char/char_edit.html', char=char, form=form)
