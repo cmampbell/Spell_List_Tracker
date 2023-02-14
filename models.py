@@ -210,7 +210,7 @@ class Stats(db.Model):
         }
 
 class Char_Class(db.Model):
-    '''Model for game classes for characters'''
+    '''Join table to track characters class, subclass, and level'''
 
     __tablename__ = 'char_classes'
 
@@ -224,16 +224,53 @@ class Char_Class(db.Model):
         db.ForeignKey('characters.id', ondelete='CASCADE')
     )
 
-    class_name = db.Column(
-        db.String,
-        nullable=False
+    class_id = db.Column(
+        db.Integer,
+        db.ForeignKey('classes.id')
     )
 
-    subclass_name = db.Column(
-        db.String
+    subclass_id = db.Column(
+        db.Integer
+        db.ForeignKey('subclasses.id')
     )
 
     level = db.Column(
         db.Integer,
+        nullable=False
+    )
+
+class Classes(db.Model):
+    '''Model for available character classes'''
+
+    __tablename__ = 'classes'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    name = db.Column(
+        db.String,
+        unique=True
+    )
+
+class Subclasses(db.Model):
+    '''Model for available character subclasses'''
+
+    __tablename__ = 'subclasses'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    name = db.Column(
+        db.String,
+        nullable=False
+    )
+
+    parent_class = db.Column(
+        db.Integer,
+        db.ForeignKey('classes.id')
         nullable=False
     )
