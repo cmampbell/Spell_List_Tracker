@@ -85,6 +85,19 @@ class User(db.Model):
                 return user
 
         return False
+
+    def user_dupe_character(self, name):
+        '''This method will check the users list of characters.
+        Returns true if a character with the same name already exists,
+        will return false if the name is unique to this user
+        
+        This will prevent users from having multiples of the same character
+        while allowing users to have characters with names already taken by other users'''
+
+        if name in [char.name for char in self.characters]:
+            return True
+        else:
+            return False
     
 class Character(db.Model):
     '''DnD Character Model for users'''
@@ -132,19 +145,6 @@ class Character(db.Model):
         char['level'] = self.get_classes()[0].level
 
         return char
-
-    def user_dupe_character(self, name):
-        '''This method will check the users list of characters.
-        Returns true if a character with the same name already exists,
-        will return false if the name is unique to this user
-        
-        This will prevent users from having multiples of the same character
-        while allowing users to have characters with names already taken by other users'''
-
-        if name in [char.name for char in self.characters]:
-            return True
-        else:
-            return False
 
     
 
