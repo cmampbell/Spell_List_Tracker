@@ -230,7 +230,7 @@ class Char_Class(db.Model):
     )
 
     subclass_id = db.Column(
-        db.Integer
+        db.Integer,
         db.ForeignKey('subclasses.id')
     )
 
@@ -271,6 +271,6 @@ class Subclasses(db.Model):
 
     parent_class = db.Column(
         db.Integer,
-        db.ForeignKey('classes.id')
+        db.ForeignKey('classes.id'),
         nullable=False
     )
