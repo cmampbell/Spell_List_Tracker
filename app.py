@@ -20,9 +20,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG'] = True
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-toolbar = DebugToolbarExtension(app)
+# toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -148,6 +148,7 @@ def show_character_form():
     form = CharacterCreationForm()
 
     if form.validate_on_submit():
+
         user = db.session.get(User, g.user.id)
 
         char = Character(
