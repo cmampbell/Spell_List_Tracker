@@ -249,9 +249,18 @@ class Classes(db.Model):
         primary_key=True
     )
 
+    index = db.Column(
+        db.String,
+        unique=True
+    )
+
     name = db.Column(
         db.String,
         unique=True
+    )
+
+    url = db.Column(
+        db.Text
     )
 
 class Subclasses(db.Model):
@@ -264,13 +273,21 @@ class Subclasses(db.Model):
         primary_key=True
     )
 
+    index = db.Column(
+        db.String
+    )
+
     name = db.Column(
         db.String,
         nullable=False
     )
 
+    url = db.Column(
+        db.Text
+    )
+
     parent_class = db.Column(
-        db.Integer,
-        db.ForeignKey('classes.id'),
+        db.String,
+        db.ForeignKey('classes.index'),
         nullable=False
     )
