@@ -41,7 +41,7 @@ class CharacterViewsTestCase(TestCase):
         '''Does show character form render correct fields'''
         with self.client as client:
             # with client.session_transaction() as session:
-            login = {'username': 'testuser', 'password':'HASHED_PASSWORD'}
+            login = {'username': 'testuser', 'password':test_password}
             client.post('/login', data=login)
 
             resp = client.get('/characters/new')
