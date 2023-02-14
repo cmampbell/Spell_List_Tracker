@@ -65,7 +65,7 @@ class UserViewTestCase(TestCase):
             self.assertEqual(testuser.username, data['username'])
 
     def test_user_login(self):
-        '''Test user login method'''
+        '''Does the user log in method work?'''
 
         with self.client as client:
             data={

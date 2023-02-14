@@ -170,7 +170,7 @@ def show_character_form():
             level = form.data['level']
         )
 
-        char.stats.append(stats)
+        char.stats = stats
         char.classes.append(_class)
         user.characters.append(char)
 
@@ -192,7 +192,7 @@ def show_char_details(char_id):
 
     char = db.session.get(Character, char_id)
 
-    stats = char.stats[0].serialize_stats().items()
+    stats = char.stats.serialize_stats().items()
 
     return render_template('char/char_details.html', user=g.user, char=char, stats=stats, owner=owner)
 
@@ -212,7 +212,7 @@ def char_edit_form(char_id):
     if form.validate_on_submit():
 
         char.name = form.data['name']
-        form.populate_obj(char.stats[0])
+        form.populate_obj(char.stats)
         form.populate_obj(char.classes[0])
 
         db.session.add(char)

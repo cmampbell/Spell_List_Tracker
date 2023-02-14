@@ -44,7 +44,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    characters = db.relationship('Character', cascade="all, delete-orphan", passive_deletes=True) 
+    characters = db.relationship('Character', backref='user', cascade="all, delete-orphan", passive_deletes=True) 
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -105,23 +105,26 @@ class Character(db.Model):
     name = db.Column(
         db.String,
         nullable=False,
-        unique=True,
     )
 
-    stats = db.relationship('Stats', cascade="all, delete-orphan", passive_deletes=True)
+    stats = db.relationship('Stats', uselist=False, cascade="all, delete-orphan", passive_deletes=True)
 
     classes = db.relationship('Char_Class', cascade="all, delete-orphan", passive_deletes=True)
 
+    # db.relationship('spell_lists', cascade="all,delete")
+
     def get_classes(self):
         '''Returns a list of classes for this character'''
-        return [_class for _class in self.classes]
+        if len(self.classes) != 0:
+            return [_class for _class in self.classes]
+        else:
+            return None
 
     def serialize_character(self):
         '''Returns a dict of all necessary fields for character form'''
-        #need to have name from chacter
-        #each individual stat in a dict
-        #each class in a dict
-        char = self.stats[0].serialize_stats()
+
+        #stats.serialize_stats returns a dict
+        char = self.stats.serialize_stats()
 
         char['name'] = self.name
         char['class_name'] = self.get_classes()[0].class_name
@@ -130,7 +133,20 @@ class Character(db.Model):
 
         return char
 
-    # db.relationship('spell_lists', cascade="all,delete")
+    def user_dupe_character(self, name):
+        '''This method will check the users list of characters.
+        Returns true if a character with the same name already exists,
+        will return false if the name is unique to this user
+        
+        This will prevent users from having multiples of the same character
+        while allowing users to have characters with names already taken by other users'''
+
+        if name in [char.name for char in self.characters]:
+            return True
+        else:
+            return False
+
+    
 
 class Stats(db.Model):
     '''Model for character stats'''
@@ -138,7 +154,7 @@ class Stats(db.Model):
     __tablename__='stats'
 
     def __repr__(self):
-        return f"<User #{self.char_id}: HP:{self.HP}, STR:{self.STR}, DEX:{self.DEX}, CON:{self.CON}, INT:{self.INT}, WIS:{self.WIS}, CHA:{self.CHA}>"
+        return f"<Char #{self.char_id}: HP:{self.HP}, STR:{self.STR}, DEX:{self.DEX}, CON:{self.CON}, INT:{self.INT}, WIS:{self.WIS}, CHA:{self.CHA}>"
 
     char_id = db.Column(
         db.Integer,
