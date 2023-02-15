@@ -295,3 +295,59 @@ class Char_Class(db.Model):
     )
 
     class_name = db.relationship('Classes')
+
+class Spells(db.Model):
+    '''Table of available spells'''
+
+    __tablename__ = 'spells'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    index = db.Column(
+        db.String,
+        unique=True
+    )
+
+    name = db.Column(
+        db.String,
+        unique=True
+    )
+
+    desc = db.Column(
+        db.Text
+    )
+
+    range = db.Column(
+        db.Integer
+    )
+
+    components = db.Columns(
+        db.String
+    )
+
+    ritual = db.Column(
+        db.Boolean
+    )
+
+    concentration = db.Column(
+        db.Boolean
+    )
+
+    casting_time = db.Column(
+        db.String
+    )
+
+    duration = db.Column(
+        db.String
+    )
+
+    spell_level = db.Column(
+        db.Integer
+    )
+
+    school = db.Column(
+        db.String
+    )
