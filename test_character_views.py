@@ -10,10 +10,12 @@ from sqlalchemy.exc import IntegrityError
 os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
 
 from app import app, CURR_USER_KEY, add_user_to_g, g
+from seed import seed_db
 
 app.app_context().push()
 
 db.create_all()
+seed_db()
 
 #disable WTForms csrf for testing
 app.config['WTF_CSRF_ENABLED'] = False
@@ -61,7 +63,7 @@ class CharacterCreationViewsTestCase(TestCase):
 
             data = { 'name': 'test_char', 'HP': 5, 'STR': 5, 'DEX': 5,
                     'CON': 5, 'INT': 5, 'WIS': 5, 'CHA': 5, 
-                    'class_name': 'Druid', 'subclass_name': 'Land', 'level': 2 }
+                    'class_id': 3, 'level': 2 }
 
             resp = client.post('/characters/new', data=data)
 
@@ -83,7 +85,7 @@ class CharacterCreationViewsTestCase(TestCase):
         '''Create a chracter to use in details and edit tests'''
         char_data = { 'name': 'test_char' } 
         stat_data = { 'HP': 5, 'STR': 5, 'DEX': 5, 'CON': 5, 'INT': 5, 'WIS': 5, 'CHA': 5} 
-        class_data= { 'class_name': 'Druid', 'subclass_name': 'Land', 'level': 2 }
+        class_data= { 'class_id': 3, 'level': 2 }
         char = Character(**char_data)
         stats = Stats(**stat_data)
         char_class = Char_Class(**class_data)
@@ -110,7 +112,7 @@ class CharacterCreationViewsTestCase(TestCase):
             #check to see if the stats are on the page
             self.assertIn(char.name, html)
             self.assertIn(str(char.stats.HP), html)
-            self.assertIn(char.classes[0].class_name, html)
+            self.assertIn(char.classes[0].class_name.name, html)
 
     def test_char_edit_form(self):
         '''Does the edit form edit the character?'''
