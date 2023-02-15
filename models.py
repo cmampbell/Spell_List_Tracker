@@ -124,12 +124,14 @@ class Character(db.Model):
 
     classes = db.relationship('Char_Class', cascade="all, delete-orphan", passive_deletes=True)
 
+    # classes = db.relationship('Classes', secondary="char_classes", passive_deletes=True)
+
     # db.relationship('spell_lists', cascade="all,delete")
 
     def get_classes(self):
         '''Returns a list of classes for this character'''
         if len(self.classes) != 0:
-            return [_class for _class in self.classes]
+            return [{'level':_class.level, 'class_name':_class.class_name.name} for _class in self.classes]
         else:
             return None
 
@@ -140,9 +142,9 @@ class Character(db.Model):
         char = self.stats.serialize_stats()
 
         char['name'] = self.name
-        char['class_name'] = self.get_classes()[0].class_name
-        char['subclass_name'] = self.get_classes()[0].subclass_name
-        char['level'] = self.get_classes()[0].level
+        char['classes'] = self.get_classes()[0]['class_name']
+        # char['subclass_name'] = self.get_classes()[0].subclass_name
+        char['level'] = self.get_classes()[0]['level']
 
         return char
 
@@ -209,36 +211,6 @@ class Stats(db.Model):
             'CHA': self.CHA
         }
 
-class Char_Class(db.Model):
-    '''Join table to track characters class, subclass, and level'''
-
-    __tablename__ = 'char_classes'
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-
-    char_id = db.Column(
-        db.Integer,
-        db.ForeignKey('characters.id', ondelete='CASCADE')
-    )
-
-    class_id = db.Column(
-        db.Integer,
-        db.ForeignKey('classes.id')
-    )
-
-    subclass_id = db.Column(
-        db.Integer,
-        db.ForeignKey('subclasses.id')
-    )
-
-    level = db.Column(
-        db.Integer,
-        nullable=False
-    )
-
 class Classes(db.Model):
     '''Model for available character classes'''
 
@@ -291,3 +263,35 @@ class Subclasses(db.Model):
         db.ForeignKey('classes.index'),
         nullable=False
     )
+
+class Char_Class(db.Model):
+    '''Join table to track characters class, subclass, and level'''
+
+    __tablename__ = 'char_classes'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    char_id = db.Column(
+        db.Integer,
+        db.ForeignKey('characters.id', ondelete='CASCADE')
+    )
+
+    class_id = db.Column(
+        db.Integer,
+        db.ForeignKey('classes.id')
+    )
+
+    subclass_id = db.Column(
+        db.Integer,
+        db.ForeignKey('subclasses.id')
+    )
+
+    level = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    class_name = db.relationship('Classes')

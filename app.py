@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from models import db, connect_db, User, Character, Stats, Char_Class
+from models import db, connect_db, User, Character, Stats, Char_Class, Classes
 from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm
 
 
@@ -146,6 +146,9 @@ def show_character_form():
         redirect('/')
 
     form = CharacterCreationForm()
+    # Pass in list of character class names from class table
+    form.class_id.choices = [(_class.id, _class.name) for _class in db.session.query(Classes).all()]
+    #get list of subclasses from chosen class
 
     if form.validate_on_submit():
 
@@ -166,8 +169,8 @@ def show_character_form():
         )
 
         _class = Char_Class(
-            class_name = form.data['class_name'],
-            subclass_name = form.data['subclass_name'],
+            class_id = form.data['class_id'],
+            # subclass_name = form.data['subclass_name'],
             level = form.data['level']
         )
 
@@ -195,6 +198,8 @@ def show_char_details(char_id):
 
     stats = char.stats.serialize_stats().items()
 
+    # classes = char.classes.class_name.name
+
     return render_template('char/char_details.html', user=g.user, char=char, stats=stats, owner=owner)
 
 @app.route('/char/<int:char_id>/edit', methods=['GET', 'POST'])
@@ -204,14 +209,14 @@ def char_edit_form(char_id):
 
     char = db.session.get(Character, char_id)
 
-    form = CharacterCreationForm(data=char.serialize_character())
+    form = CharacterCreationForm(data=char.serialize_character(), class_id=char.classes[0].class_name.id)
+    form.class_id.choices = [(_class.id, _class.name) for _class in db.session.query(Classes).all()]
 
     if g.user.id != char.user_id:
         flash("You don't have permission to view this page")
         return redirect(f'/char/{char_id}')
 
     if form.validate_on_submit():
-
         char.name = form.data['name']
         form.populate_obj(char.stats)
         form.populate_obj(char.classes[0])
