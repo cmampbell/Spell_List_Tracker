@@ -296,8 +296,12 @@ class Char_Class(db.Model):
 
     class_name = db.relationship('Classes')
 
-class Spells(db.Model):
-    '''Table of available spells'''
+class Spell(db.Model):
+    '''Table of available spells. We save certain info in the database,
+    the rest of the data we can make an AJAX request on front-end to retrieve.
+    This is everything we want to save on the backend and display on the spell list page'''
+
+    #I think we need to not track damage/healing, leave that to the front end
 
     __tablename__ = 'spells'
 
@@ -316,20 +320,12 @@ class Spells(db.Model):
         unique=True
     )
 
-    desc = db.Column(
-        db.Text
-    )
-
     range = db.Column(
-        db.Integer
-    )
-
-    components = db.Columns(
         db.String
-    )
+    )    
 
-    ritual = db.Column(
-        db.Boolean
+    duration = db.Column(
+        db.String
     )
 
     concentration = db.Column(
@@ -340,12 +336,16 @@ class Spells(db.Model):
         db.String
     )
 
-    duration = db.Column(
-        db.String
+    level = db.Column(
+        db.Integer
     )
 
-    spell_level = db.Column(
-        db.Integer
+    damaging = db.Column(
+        db.Boolean
+    )
+
+    healing = db.Column(
+        db.Boolean
     )
 
     school = db.Column(
