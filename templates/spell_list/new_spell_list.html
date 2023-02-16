@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}{{char.name}} Characters{% endblock %}
+{% block title %}{{char.name}} Spell List{% endblock %}
 
 {% block content %}
-<h1>{{char.name}}</h1>
+<h1>{{char.name}} New Spell List</h1>
 
 <h2>Class</h2>
     {% for _class in char.get_classes() %}
@@ -15,9 +15,22 @@
     <li>{{key}} {{value}}</li>
     {% endfor %}
 </ul>
+
+<h2>Available Spell Slots</h2>
+<ul>
+ <li>{{slots}}</li>
+</ul>
+
+<h2>Available Spells</h2>
+<ul>
+    {% for spell in spells %}
+    <li>{{spell.name}} {{spell.level}}</li>
+    {% endfor %}
+</ul>
+
 {% if owner %}
 <a href="/char/{{char.id}}/edit">Edit this character!</a>
-<a href="/char/{{char.id}}/spell_list/new">Make a spell list!</a>
+<a href="/char/{{char.id}}/spell_list/new"></a>
 {% endif %}
 
 {% endblock %}

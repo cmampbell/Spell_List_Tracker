@@ -131,7 +131,7 @@ class Character(db.Model):
     def get_classes(self):
         '''Returns a list of classes for this character'''
         if len(self.classes) != 0:
-            return [{'level':_class.level, 'class_name':_class.class_name.name} for _class in self.classes]
+            return [{'level':_class.level, 'class_name':_class.class_name.index} for _class in self.classes]
         else:
             return None
 

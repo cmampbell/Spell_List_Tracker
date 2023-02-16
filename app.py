@@ -1,14 +1,17 @@
 import os
+import requests
+import pdb
 
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from models import db, connect_db, User, Character, Stats, Char_Class, Classes
+from models import db, connect_db, User, Character, Stats, Char_Class, Classes, Spell
 from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm
 
 
 CURR_USER_KEY = "curr_user"
+base_url = 'https://www.dnd5eapi.co'
 
 app = Flask(__name__)
 
@@ -228,4 +231,63 @@ def char_edit_form(char_id):
         return redirect(f'/char/{char_id}')
 
     return render_template('char/char_edit.html', char=char, form=form)
+
+@app.route('/char/<int:char_id>/spell_list/new', methods=['GET', 'POST'])
+def new_spell_list_form(char_id):
+    '''Show form to create a new spell list'''
+
+    char = db.session.get(Character, char_id)
+    stats = char.stats.serialize_stats().items()
+
+    #from char we need to get classes
+    class_list = char.get_classes()
+
+    #this is the index of spell names
+    spells = get_class_spells(class_list)
+
+    #these are the spell slots available to our character
+    slots_by_class = get_spell_slots(class_list)
+
+    #clean the dict so it only contains spell levels that the character has slots avaible
+    for spell_slots in slots_by_class:
+        for key in list(spell_slots.keys()):
+            if spell_slots[key] == 0:
+                del spell_slots[key]
+
+    #get the highest level of spell slot available for the character
+    highest_spell_level = max([len(spell_slots)-1 for spell_slots in slots_by_class])
+
+    #get all spells from our database that have a level less than or equal to the highest level spell slot
+    spell_objects = db.session.query(Spell).filter(Spell.level <= highest_spell_level, Spell.index.in_(spells)).order_by(Spell.level, Spell.name)
+
+    return render_template('spell_list/new_spell_list.html', char=char, spells=spell_objects, slots=slots_by_class, stats=stats)
+
+def get_class_spells(class_list):
     
+    available_spells = set()
+    for _class in class_list:
+        #make request to api for spells available to the current character class
+        results = requests.get(f'{base_url}/api/classes/{_class["class_name"]}/spells').json()['results']
+
+        #create a set of spell_indexes from the restults of the api call
+        new_spells = {result['index'] for result in results}
+
+        #add the spells to the set of available spells
+        available_spells.update(new_spells)
+
+    return available_spells
+
+def get_spell_slots(class_list):
+    '''Returns a dict with available spell slots'''
+    slots=[]
+    for _class in class_list:
+        #api call to get level info by character class
+        resp = requests.get(f"{base_url}/api/classes/{_class['class_name']}/levels").json()
+
+        #loop through api response to find level info for character level
+        for item in resp:
+            if item['level'] == _class['level']:
+                slots.append(item['spellcasting'])
+    
+    #might want to return a dict with one key for class_name and value of the class name and level, the other for spellcasting ability per class
+    return slots

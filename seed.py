@@ -26,7 +26,6 @@ def seed_db_classes():
     db.session.commit()
 
 def seed_db_spells():
-    # don't know why this is in here
     # classes = db.session.query(Classes).all()
 
     #get the list of spells from the API
