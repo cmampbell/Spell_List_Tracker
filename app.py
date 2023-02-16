@@ -237,6 +237,11 @@ def new_spell_list_form(char_id):
     '''Show form to create a new spell list'''
 
     char = db.session.get(Character, char_id)
+
+    if g.user.id != char.user_id:
+        flash("You don't have permission to view this page")
+        return redirect(f'/char/{char_id}')
+
     stats = char.stats.serialize_stats().items()
 
     #from char we need to get classes

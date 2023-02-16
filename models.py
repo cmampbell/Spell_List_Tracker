@@ -301,8 +301,6 @@ class Spell(db.Model):
     the rest of the data we can make an AJAX request on front-end to retrieve.
     This is everything we want to save on the backend and display on the spell list page'''
 
-    #I think we need to not track damage/healing, leave that to the front end
-
     __tablename__ = 'spells'
 
     id = db.Column(

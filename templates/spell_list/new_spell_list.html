@@ -3,34 +3,39 @@
 {% block title %}{{char.name}} Spell List{% endblock %}
 
 {% block content %}
-<h1>{{char.name}} New Spell List</h1>
+<section id="char-details">
+    <h1>New {{char.name}} Spell List</h1>
 
-<h2>Class</h2>
-    {% for _class in char.get_classes() %}
-    <li>Level {{_class.level}} {{_class.class_name}}</li>
-    {% endfor %}
-<h2>Stats</h2>
-<ul>
-    {% for key, value in stats %}
-    <li>{{key}} {{value}}</li>
-    {% endfor %}
-</ul>
+    <h2>Class</h2>
+        {% for _class in char.get_classes() %}
+            <li>Level {{_class.level}} {{_class.class_name}}</li>
+        {% endfor %}
+    <h2>Stats</h2>
+    <ul>
+        {% for key, value in stats %}
+            <li>{{key}} {{value}}</li>
+        {% endfor %}
+    </ul>
 
-<h2>Available Spell Slots</h2>
-<ul>
- <li>{{slots}}</li>
-</ul>
+    <h2>Available Spell Slots</h2>
+    <ul>
+        <li>{{slots}}</li>
+    </ul>
+</section>
+
 
 <h2>Available Spells</h2>
-<ul>
-    {% for spell in spells %}
-    <li>{{spell.name}} {{spell.level}}</li>
-    {% endfor %}
-</ul>
 
-{% if owner %}
-<a href="/char/{{char.id}}/edit">Edit this character!</a>
-<a href="/char/{{char.id}}/spell_list/new"></a>
-{% endif %}
+<section id="avail-spells"></section>
+    {% for spell in spells %}
+    <div class="card spell-card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{spell.name}}</h5>
+          <p class="card-text">{{spell.range}}</p>
+        </div>
+      </div>
+    {% endfor %}
+</section>
 
 {% endblock %}
+
