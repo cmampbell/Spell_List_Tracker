@@ -7,13 +7,13 @@
     <h1>New {{char.name}} Spell List</h1>
 
     <h2>Class</h2>
-        {% for _class in char.get_classes() %}
-            <li>Level {{_class.level}} {{_class.class_name}}</li>
-        {% endfor %}
+    {% for _class in char.get_classes() %}
+    <li>Level {{_class.level}} {{_class.class_name}}</li>
+    {% endfor %}
     <h2>Stats</h2>
     <ul>
         {% for key, value in stats %}
-            <li>{{key}} {{value}}</li>
+        <li>{{key}} {{value}}</li>
         {% endfor %}
     </ul>
 
@@ -23,19 +23,28 @@
     </ul>
 </section>
 
-
-<h2>Available Spells</h2>
-
-<section id="avail-spells"></section>
-    {% for spell in spells %}
-    <div class="card spell-card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">{{spell.name}}</h5>
-          <p class="card-text">{{spell.range}}</p>
+<section id="list-creator">
+    <section id="avail-spells">
+        <h2>Available Spells</h2>
+        {% for spell in spells %}
+        <div class="card spell-card" id="spell-{{spell.id}}" style="width: 18rem;" draggable="True">
+            <div class="card-body">
+                <h5 class="card-title">{{spell.name}}</h5>
+                <p class="card-text"><span class="range">Range: {{spell.range}}</span> <span class="level">Level:
+                        {{spell.level}}</span></p>
+            </div>
         </div>
-      </div>
-    {% endfor %}
+        {% endfor %}
+    </section>
+    <section id="spell-list-zone">
+        <h2>Drop Spells Here</h2>
+        <section id="target">
+        </section>
+    </section>
+
+
 </section>
 
-{% endblock %}
+<script src="/static/spell_list.js"></script>
 
+{% endblock %}

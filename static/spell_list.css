@@ -1,0 +1,21 @@
+#list-creator{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+#target {
+    height: 500px;
+    width: 400px;
+    background-color: gray;
+    opacity: 50%;
+    border-style: dotted;
+}
+
+.range {
+    font-style:italic
+}
+
+.level {
+    font-style: oblique;
+}
