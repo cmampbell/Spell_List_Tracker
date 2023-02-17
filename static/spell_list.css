@@ -9,16 +9,16 @@
     background-color: gray;
     opacity: 50%;
     border-style: dotted;
+    height: 700px;
 }
 .empty-list {
-    height: 500px;
+    height: 100%;
     width: 400px;
 }
 
 .has-items {
     height: auto;
     width: auto;
-    /* padding: 2%; */
 }
 
 .range {

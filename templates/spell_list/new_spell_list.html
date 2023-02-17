@@ -24,17 +24,22 @@
 </section>
 
 <section id="list-creator">
+
     <section id="avail-spells">
         <h2>Available Spells</h2>
-        {% for spell in spells %}
-        <div class="card spell-card" id="{{spell.id}}" style="width: 18rem;" draggable="True" data-list-position="{{loop.index}}">
-            <div class="card-body">
-                <h5 class="card-title">{{spell.name}}</h5>
-                <p class="card-text"><span class="range">Range: {{spell.range}}</span> <span class="level">Level:
+
+        <div id="spell-cards-div">
+            {% for spell in spells %}
+            <div class="card spell-card" id="{{spell.id}}" style="width: 18rem;" draggable="True" data-list-position="{{loop.index}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{spell.name}}</h5>
+                    <p class="card-text"><span class="range">Range: {{spell.range}}</span> <span class="level">Level:
                         {{spell.level}}</span></p>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+
     </section>
 
     <section id="spell-list-zone">
@@ -53,8 +58,8 @@
         <section id="target" class="empty-list">
         </section>
         <input type="submit" class="btn btn-success" id="save-button" value="Save List">
-        <button class="btn btn-secondary" id="clear-button">Clear List</button>
     </form>
+    <button class="btn btn-secondary" id="clear-button">Clear List</button>
 
     </section>
 </section>
