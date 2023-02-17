@@ -1,15 +1,24 @@
 #list-creator{
+    width: 75%;
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
 }
 
-#target {
-    height: 500px;
-    width: 400px;
+#target{
     background-color: gray;
     opacity: 50%;
     border-style: dotted;
+}
+.empty-list {
+    height: 500px;
+    width: 400px;
+}
+
+.has-items {
+    height: auto;
+    width: auto;
+    /* padding: 2%; */
 }
 
 .range {
