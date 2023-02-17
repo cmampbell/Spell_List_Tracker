@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{list.name}} Spell List{% endblock %}
+
+{% block content %}
+<h1>{{char.name}}</h1>
+<h2>{{list.name}}</h2>
+<p>Created on {{list.date}}</p>
+
+
+{% for spell in list.spells %}
+<div class="card spell-card" id="{{spell.id}}" style="width: 18rem;" draggable="True"
+    data-list-position="{{loop.index}}">
+    <div class="card-body">
+        <h5 class="card-title">{{spell.name}}</h5>
+        <p class="card-text"><span class="range">Range: {{spell.range}}</span> <span class="level">Level:
+                {{spell.level}}</span></p>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

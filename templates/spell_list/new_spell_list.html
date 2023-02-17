@@ -27,7 +27,7 @@
     <section id="avail-spells">
         <h2>Available Spells</h2>
         {% for spell in spells %}
-        <div class="card spell-card" id="spell-{{spell.id}}" style="width: 18rem;" draggable="True" data-list-position="{{loop.index}}">
+        <div class="card spell-card" id="{{spell.id}}" style="width: 18rem;" draggable="True" data-list-position="{{loop.index}}">
             <div class="card-body">
                 <h5 class="card-title">{{spell.name}}</h5>
                 <p class="card-text"><span class="range">Range: {{spell.range}}</span> <span class="level">Level:
@@ -36,15 +36,27 @@
         </div>
         {% endfor %}
     </section>
+
     <section id="spell-list-zone">
         <h2>Spell List</h2>
+        <form method="POST" id="spell-list-form">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden' %}
+            {% for error in field.errors %}
+                <span>{{ error }}</span>
+            {% endfor %}
+    
+            {{ field(placeholder=field.label.text) }}
+    
+        {% endfor %}
         <section id="target" class="empty-list">
         </section>
-        <button class="btn btn-success" id="save-button">Save List</button>
+        <input type="submit" class="btn btn-success" id="save-button" value="Save List">
         <button class="btn btn-secondary" id="clear-button">Clear List</button>
+    </form>
+
     </section>
-
-
 </section>
 
 <script src="/static/spell_list.js"></script>
