@@ -1,6 +1,6 @@
 """Forms for Spell Tracker app."""
 
-from wtforms import StringField, PasswordField, SelectField, validators
+from wtforms import StringField, PasswordField, SelectField, SelectMultipleField, validators
 from flask_wtf import FlaskForm
 from wtforms_alchemy import model_form_factory, ModelFormField
 from models import db, Character, Stats, Classes, Char_Class
@@ -43,3 +43,8 @@ class CharClassModelForm(ClassModelForm):
 class CharacterCreationForm(CharClassModelForm):
     class Meta:
         model = Stats
+
+class SpellListForm(FlaskForm):
+    '''Hidden form to track spells user selects'''
+    name = StringField('Spell List Name', [validators.Length(min=3, max=50), validators.DataRequired()])
+    spells = SelectMultipleField('Spells', coerce=int)

@@ -126,7 +126,7 @@ class Character(db.Model):
 
     # classes = db.relationship('Classes', secondary="char_classes", passive_deletes=True)
 
-    # db.relationship('spell_lists', cascade="all,delete")
+    spell_lists = db.relationship('SpellList', cascade="all,delete")
 
     def get_classes(self):
         '''Returns a list of classes for this character'''
@@ -348,4 +348,52 @@ class Spell(db.Model):
 
     school = db.Column(
         db.String
+    )
+
+class SpellList(db.Model):
+    '''Table of spell lists made by users with their characters'''
+
+    __tablename__ = 'spell_lists'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    char_id = db.Column(
+        db.Integer,
+        db.ForeignKey('characters.id', ondelete='CASCADE')
+    )
+
+    name = db.Column(
+        db.String,
+        unique=True
+    )
+
+    date = db.Column(
+        db.Date,
+        nullable=False,
+        default=datetime.utcnow()
+    )
+
+    spells = db.relationship('Spell', secondary="spell_list_spells", backref='spell_lists')
+
+class SpellListSpells(db.Model):
+    '''Through table to track which spells are in each spell list'''
+
+    __tablename__ = 'spell_list_spells'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    list_id = db.Column(
+        db.Integer,
+        db.ForeignKey('spell_lists.id')
+    )
+
+    spell_id = db.Column(
+        db.Integer,
+        db.ForeignKey('spells.id')
     )

@@ -6,8 +6,8 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from models import db, connect_db, User, Character, Stats, Char_Class, Classes, Spell
-from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm
+from models import db, connect_db, User, Character, Stats, Char_Class, Classes, Spell, SpellList
+from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm, SpellListForm
 
 
 CURR_USER_KEY = "curr_user"
@@ -236,11 +236,19 @@ def char_edit_form(char_id):
 def new_spell_list_form(char_id):
     '''Show form to create a new spell list'''
 
+    print('**********************************')
+    print(request.method)
+    print('************************************')
+
     char = db.session.get(Character, char_id)
 
     if g.user.id != char.user_id:
         flash("You don't have permission to view this page")
         return redirect(f'/char/{char_id}')
+    
+    # if request.method == 'GET': we can save API requests and databse requests by wrapping
+    # our logic in conditionals depending on if the method is get or post
+        
 
     stats = char.stats.serialize_stats().items()
 
@@ -265,7 +273,37 @@ def new_spell_list_form(char_id):
     #get all spells from our database that have a level less than or equal to the highest level spell slot
     spell_objects = db.session.query(Spell).filter(Spell.level <= highest_spell_level, Spell.index.in_(spells)).order_by(Spell.level, Spell.name)
 
-    return render_template('spell_list/new_spell_list.html', char=char, spells=spell_objects, slots=slots_by_class, stats=stats)
+    form = SpellListForm()
+    form.spells.choices = [(spell.id, spell.name) for spell in spell_objects]
+
+    if form.validate_on_submit():
+        spell_list = SpellList(char_id=char.id, name=form.data['name'])
+
+        selected_spells = form.data['spells']
+
+        # need to take array of spell ids and find them in the database
+
+        for spell in spell_objects:
+            if spell.id in selected_spells:
+                spell_list.spells.append(spell)
+
+        db.session.add(spell_list)
+        db.session.commit()
+
+        return redirect(f'/char/{char.id}/spell_list/{spell_list.id}')
+
+
+    return render_template('spell_list/new_spell_list.html', char=char, spells=spell_objects, slots=slots_by_class, stats=stats, form=form)
+
+@app.route('/char/<int:char_id>/spell_list/<int:spell_list_id>')
+def show_spell_list_details(char_id, spell_list_id):
+    char = db.session.get(Character, char_id)
+
+    spell_list = db.session.get(SpellList, spell_list_id)
+
+    return render_template('spell_list/spell_list_details.html', char=char, list=spell_list)
+
+
 
 def get_class_spells(class_list):
     

@@ -15,6 +15,13 @@
     <li>{{key}} {{value}}</li>
     {% endfor %}
 </ul>
+
+<h2>Spell Lists</h2>
+<ul>
+    {% for list in char.spell_lists %}
+    <a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a>
+    {% endfor %}
+</ul>
 {% if owner %}
 <a href="/char/{{char.id}}/edit">Edit this character!</a>
 <a href="/char/{{char.id}}/spell_list/new">Make a spell list!</a>
