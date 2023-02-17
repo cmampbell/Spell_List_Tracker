@@ -1,38 +1,20 @@
+const dropZone = document.getElementById("target")
+
 function allowDrop(evt) {
     evt.preventDefault();
-    console.log(evt.dataTransfer.getData("text"))
 }
 
 function drag(evt) {
     evt.dataTransfer.setData("text", evt.target.id);
-    console.log(evt.dataTransfer.getData("text"))
 }
 
 function drop(evt) {
     evt.preventDefault();
     let data = evt.dataTransfer.getData("text");
 
-    let dropZone = document.getElementById("target")
-    if (dropZone.classList.contains('empty-list')){
-        dropZone.classList.toggle('empty-list')
-        dropZone.classList.toggle('has-items')
-    }
+    toggleDropZoneClass()
+
     dropZone.appendChild(document.getElementById(data));
-}
-
-function clickClearButton(evt){
-    console.log('in click')
-    evt.preventDefault()
-    const dropZone = document.getElementById("target")
-    const availSpells = document.getElementById('avail-spells')
-
-    for(child in dropZone.children){
-        console.log(child)
-        availSpells.prepend(child)
-    }
-    dropZone.innerHTML = ''
-    dropZone.classList.toggle('empty-list')
-    dropZone.classList.toggle('has-items')
 }
 
 function start() {
@@ -44,15 +26,41 @@ function start() {
         card.addEventListener("dragstart", drag);
     }
 
-    const dropZone = document.getElementById("target")
     dropZone.addEventListener("dragover", allowDrop)
     dropZone.addEventListener("drop", drop)
 
     const clearButton = document.getElementById('clear-button')
-    clearButton.addEventListener("click", clickClearButton)
+    clearButton.addEventListener("click", clearSpellList)
 }
 
 window.addEventListener("DOMContentLoaded", start)
+
+function compare(a, b) {
+    if (a.dataset.listPosition < b.dataset.listPosition)
+        return -1;
+    if (a.dataset.listPosition > b.dataset.listPosition)
+        return 1;
+    return 0;
+}
+  
+// Function to sort spells
+function clearSpellList() {
+    //reset drop-zone class
+    toggleDropZoneClass()
+    // get all spells
+    const allSpellCards = document.querySelectorAll("[data-list-position]");
+
+    console.log(allSpellCards)
+    //make an array of all spells
+    let spellArray = Array.from(allSpellCards).sort(compare);
+
+    spellArray.forEach(elem => document.querySelector("#avail-spells").appendChild(elem));
+}
+
+function toggleDropZoneClass(){
+    dropZone.classList.toggle('empty-list')
+    dropZone.classList.toggle('has-items')
+}
 
 // TODO:
 // Get clear list button working
