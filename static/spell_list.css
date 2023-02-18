@@ -1,5 +1,4 @@
 #list-creator{
-    width: 75%;
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
@@ -11,6 +10,10 @@
     border-style: dotted;
     height: 700px;
 }
+
+#avail-spells {
+    width: 45%;
+}
 .empty-list {
     height: 100%;
     width: 400px;
@@ -21,10 +24,25 @@
     width: auto;
 }
 
+.spell-card {
+    transition-property: height, width;
+    transition-duration: .5s;
+}
+
 .range {
     font-style:italic
 }
 
 .level {
     font-style: oblique;
+}
+
+div.small {
+    width: 20rem;
+    height: auto;
+}
+
+div.large {
+    width: 40rem;
+    height: auto;
 }

@@ -348,6 +348,19 @@ class Spell(db.Model):
         db.String
     )
 
+    def serialize_self(self):
+        return {
+            'name': self.name,
+            'range': self.range,
+            'duration': self.duration,
+            'concentration': self.concentration,
+            'casting Time': self.casting_time,
+            'spell Level': self.level,
+            'damaging': self.damaging,
+            'healing': self.healing,
+            'school': self.school
+        }
+
 class SpellList(db.Model):
     '''Table of spell lists made by users with their characters'''
 
