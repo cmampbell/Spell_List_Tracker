@@ -18,5 +18,8 @@
     </div>
 </div>
 {% endfor %}
+<form action="/spell_list/{{list.id}}/delete" method="POST">
+    <button class="btn btn-danger">Delete</button>
+</form>
 
 {% endblock %}

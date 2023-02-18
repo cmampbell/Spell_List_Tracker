@@ -120,13 +120,11 @@ class Character(db.Model):
         nullable=False,
     )
 
-    stats = db.relationship('Stats', uselist=False, cascade="all, delete-orphan", passive_deletes=True)
+    stats = db.relationship('Stats', uselist=False, cascade="all, delete-orphan")
 
-    classes = db.relationship('Char_Class', cascade="all, delete-orphan", passive_deletes=True)
+    classes = db.relationship('Char_Class', cascade="all, delete-orphan")
 
-    # classes = db.relationship('Classes', secondary="char_classes", passive_deletes=True)
-
-    spell_lists = db.relationship('SpellList', cascade="all,delete")
+    spell_lists = db.relationship('SpellList', cascade="all, delete, delete-orphan", backref='char')
 
     def get_classes(self):
         '''Returns a list of classes for this character'''
@@ -377,6 +375,8 @@ class SpellList(db.Model):
     )
 
     spells = db.relationship('Spell', secondary="spell_list_spells", backref='spell_lists')
+
+    spell_list_spells = db.relationship('SpellListSpells', cascade='all, delete')
 
 class SpellListSpells(db.Model):
     '''Through table to track which spells are in each spell list'''

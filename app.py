@@ -236,9 +236,7 @@ def char_edit_form(char_id):
 def new_spell_list_form(char_id):
     '''Show form to create a new spell list'''
 
-    print('**********************************')
-    print(request.method)
-    print('************************************')
+    # request.method returns HTTP request method. 
 
     char = db.session.get(Character, char_id)
 
@@ -248,8 +246,10 @@ def new_spell_list_form(char_id):
     
     # if request.method == 'GET': we can save API requests and databse requests by wrapping
     # our logic in conditionals depending on if the method is get or post
-        
 
+    ####################################################  
+    # getting spells needs to be moved out of the view function
+    ####################################################
     stats = char.stats.serialize_stats().items()
 
     #from char we need to get classes
@@ -292,7 +292,6 @@ def new_spell_list_form(char_id):
 
         return redirect(f'/char/{char.id}/spell_list/{spell_list.id}')
 
-
     return render_template('spell_list/new_spell_list.html', char=char, spells=spell_objects, slots=slots_by_class, stats=stats, form=form)
 
 @app.route('/char/<int:char_id>/spell_list/<int:spell_list_id>')
@@ -303,7 +302,18 @@ def show_spell_list_details(char_id, spell_list_id):
 
     return render_template('spell_list/spell_list_details.html', char=char, list=spell_list)
 
+@app.route('/spell_list/<int:spell_list_id>/delete', methods=['POST'])
+def delete_spell_list(spell_list_id):
+    spell_list = db.session.get(SpellList, spell_list_id)
 
+    if g.user.id != spell_list.char.user_id:
+        flash("You don't have permission to view this page")
+        return redirect(f'/char/{spell_list.char.id}')
+
+    db.session.delete(spell_list)
+    db.session.commit()
+
+    return redirect(f'/char/{spell_list.char_id}')
 
 def get_class_spells(class_list):
     
