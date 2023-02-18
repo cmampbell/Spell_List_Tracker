@@ -23,8 +23,11 @@
     {% endfor %}
 </ul>
 {% if owner %}
-<a href="/char/{{char.id}}/edit">Edit this character!</a>
-<a href="/char/{{char.id}}/spell_list/new">Make a spell list!</a>
+<a href="/char/{{char.id}}/edit" class="btn btn-primary">Edit this character!</a>
+<a href="/char/{{char.id}}/spell_list/new" class="btn btn-success">Make a spell list!</a>
+<form action="/char/{{char.id}}/delete" method="POST">
+    <button class="btn btn-danger">Delete this character</button>
+</form>
 {% endif %}
 
 {% endblock %}

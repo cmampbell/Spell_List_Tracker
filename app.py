@@ -232,6 +232,21 @@ def char_edit_form(char_id):
 
     return render_template('char/char_edit.html', char=char, form=form)
 
+@app.route('/char/<int:char_id>/delete', methods=['POST'])
+def delete_char(char_id):
+    char = db.session.get(Character, char_id)
+
+    if g.user.id != char.user_id:
+        flash("You don't have permission to view this page")
+        return redirect(f'/char/{char.id}')
+    
+    db.session.delete(char)
+    db.session.commit()
+
+    return redirect(f'/user/{char.user_id}')
+    
+
+
 @app.route('/char/<int:char_id>/spell_list/new', methods=['GET', 'POST'])
 def new_spell_list_form(char_id):
     '''Show form to create a new spell list'''
