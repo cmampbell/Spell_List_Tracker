@@ -147,8 +147,6 @@ def delete_user(user_id):
         flash("You can't access this page")
         redirect('/')
 
-    # pdb.set_trace()
-
     # Delete the users characters first
     for char in user.characters:
         db.session.delete(char)
