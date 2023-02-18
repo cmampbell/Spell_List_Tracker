@@ -376,7 +376,7 @@ class SpellList(db.Model):
 
     spells = db.relationship('Spell', secondary="spell_list_spells", backref='spell_lists')
 
-    spell_list_spells = db.relationship('SpellListSpells', cascade='all, delete, delete-orphan', passive_deletes=True)
+    spell_list_spells = db.relationship('SpellListSpells', cascade='all, delete, delete-orphan', passive_deletes=True, overlaps="spell_lists, spells")
 
 class SpellListSpells(db.Model):
     '''Through table to track which spells are in each spell list'''

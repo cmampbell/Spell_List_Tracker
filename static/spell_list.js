@@ -87,6 +87,11 @@ function toggleDropZone() {
     }
 }
 
+async function handleCardClick(evt){
+    // Write this function!
+
+}
+
 function start() {
 
     // hide the select field with all spell options
@@ -98,6 +103,7 @@ function start() {
 
     for (card of spellCards){
         card.addEventListener("dragstart", drag);
+        card.addEventListener("click", handleCardClick)
     }
 
     dropZone.addEventListener("dragover", allowDrop)
