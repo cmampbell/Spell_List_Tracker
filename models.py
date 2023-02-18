@@ -44,7 +44,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    characters = db.relationship('Character', backref='user', cascade="all, delete-orphan", passive_deletes=True) 
+    characters = db.relationship('Character', backref='user', cascade="all, delete, delete-orphan", passive_deletes=True) 
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -120,11 +120,11 @@ class Character(db.Model):
         nullable=False,
     )
 
-    stats = db.relationship('Stats', uselist=False, cascade="all, delete-orphan")
+    stats = db.relationship('Stats', uselist=False, cascade="all, delete, delete-orphan")
 
-    classes = db.relationship('Char_Class', cascade="all, delete-orphan")
+    classes = db.relationship('Char_Class', cascade="all, delete, delete-orphan")
 
-    spell_lists = db.relationship('SpellList', cascade="all, delete, delete-orphan", backref='char')
+    spell_lists = db.relationship('SpellList', cascade="all, delete-orphan", backref='char')
 
     def get_classes(self):
         '''Returns a list of classes for this character'''
@@ -376,7 +376,7 @@ class SpellList(db.Model):
 
     spells = db.relationship('Spell', secondary="spell_list_spells", backref='spell_lists')
 
-    spell_list_spells = db.relationship('SpellListSpells', cascade='all, delete')
+    spell_list_spells = db.relationship('SpellListSpells', cascade='all, delete, delete-orphan', passive_deletes=True)
 
 class SpellListSpells(db.Model):
     '''Through table to track which spells are in each spell list'''
@@ -390,7 +390,7 @@ class SpellListSpells(db.Model):
 
     list_id = db.Column(
         db.Integer,
-        db.ForeignKey('spell_lists.id')
+        db.ForeignKey('spell_lists.id', ondelete='CASCADE')
     )
 
     spell_id = db.Column(

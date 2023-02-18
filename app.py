@@ -138,6 +138,31 @@ def show_user_page(user_id):
 
     return render_template('users/details.html', user=g.user, chars=g.user.characters)
 
+@app.route('/user/<int:user_id>/delete', methods=['POST'])
+def delete_user(user_id):
+    '''Delete users account'''
+    user = db.session.get(User, user_id)
+
+    if g.user.id != user_id:
+        flash("You can't access this page")
+        redirect('/')
+
+    # pdb.set_trace()
+
+    # Delete the users characters first
+    for char in user.characters:
+        db.session.delete(char)
+
+    db.session.commit()
+
+    #then delete user
+    db.session.delete(user)
+    db.session.commit()
+
+    flash(f'Deleted {user.username} account')
+    return redirect('/')
+
+
 ################### CHARACTER VIEWS #########################
 
 @app.route('/characters/new', methods=['GET', 'POST'])
