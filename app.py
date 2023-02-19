@@ -304,13 +304,19 @@ def new_spell_list_form(char_id):
     slots_by_class = get_spell_slots(class_list)
 
     #clean the dict so it only contains spell levels that the character has slots avaible
+    highest_spell_level = 0
     for spell_slots in slots_by_class:
         for key in list(spell_slots.keys()):
-            if spell_slots[key] == 0:
+            if spell_slots[key] == 0 and 'spell_slot' in key:
                 del spell_slots[key]
+            elif 'spell_slot' in key:
+                highest_spell_level += 1
 
     #get the highest level of spell slot available for the character
-    highest_spell_level = max([len(spell_slots)-1 for spell_slots in slots_by_class])
+    #there are two keys that make this not work, "cantrips_known", "spells_known"
+    
+    # highest_spell_level = max([len(spell_slots) for spell_slots in slots_by_class if 'spell_slot' in spell_slots.keys()])
+                
 
     #get all spells from our database that have a level less than or equal to the highest level spell slot
     spell_objects = db.session.query(Spell).filter(Spell.level <= highest_spell_level, Spell.index.in_(spells)).order_by(Spell.level, Spell.name)

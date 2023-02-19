@@ -23,7 +23,7 @@
         {% endif %}
     </nav>
     {% block content %}
-    {% for category, message in get_flashed_messages(with_categories=True) %}
+    {% for message in get_flashed_messages() %}
     <div class="alert alert-{{ category }}">{{ message }}</div>
     {% endfor %}
     CONTENT GOES HERE
