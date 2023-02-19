@@ -9,8 +9,11 @@ from sqlalchemy.exc import IntegrityError
 os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
 
 from app import app
+# from seed import seed_db_classes
 
-db.create_all()
+# db.drop_all()
+# db.create_all()
+# seed_db_classes()
 
 class UnitCharacterModelTestCase(TestCase):
     '''Test Character Model'''
@@ -140,7 +143,7 @@ class CharacterModelClassesModelIntegrationTestCase(TestCase):
     def test_char_classes_model(self):
         '''Testing the character and char_class relationship'''
 
-        _class = Char_Class(class_id=1, level=5)
+        _class = Char_Class(class_id=4, level=5)
 
         self.char.classes.append(_class)
 
@@ -151,9 +154,7 @@ class CharacterModelClassesModelIntegrationTestCase(TestCase):
 class CharacterModelMethodsTestCase(TestCase):
     '''Testing the character model methods'''
     def setUp(self):
-        Stats.query.delete()
         Character.query.delete()
-        Classes.query.delete()
         User.query.delete()
 
         self.user = User(
@@ -161,7 +162,6 @@ class CharacterModelMethodsTestCase(TestCase):
             username="testuser",
             password="HASHED_PASSWORD"
         )
-        self._class = Classes(index='druid', name='Druid', url='/api/classes/druid')
 
         self.stats = Stats(            
             HP=10,
@@ -174,7 +174,6 @@ class CharacterModelMethodsTestCase(TestCase):
         )
 
         db.session.add(self.user)
-        db.session.add(self._class)
         db.session.commit()
 
         self.char = Character(
@@ -182,14 +181,12 @@ class CharacterModelMethodsTestCase(TestCase):
             user_id=self.user.id
         )
 
-        char_class = Char_Class(class_id=self._class.id, level=4)
+        char_class = Char_Class(class_id=4, level=4)
 
         self.char.classes.append(char_class)
         self.char.stats = self.stats
         db.session.add(self.char)
         db.session.commit()
-
-
 
     def tearDown(self):
         db.session.rollback()
@@ -199,7 +196,7 @@ class CharacterModelMethodsTestCase(TestCase):
 
         classes = self.char.get_classes()
 
-        self.assertEqual(self._class.index, classes[0]['class_name'])
+        self.assertEqual(self.char.classes[0].class_name.index, classes[0]['class_name'])
         self.assertTrue(isinstance(classes, list))
 
     def test_serialize_character(self):

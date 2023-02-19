@@ -181,7 +181,7 @@ class Character(db.Model):
 
             #loop through api response to find level info for character level
             for item in resp:
-                if item['level'] == _class['level']:
+                if item['level'] == _class['level'] and 'spellcasting' in item:
                     slots.append(item['spellcasting'])
                     #slots[_class] = item['spellcasting']
     
