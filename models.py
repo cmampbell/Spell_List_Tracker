@@ -1,9 +1,12 @@
 """SQLAlchemy models for Spell Tracker."""
 
+import requests
 from datetime import datetime
 
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+
+base_url = 'https://www.dnd5eapi.co'
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -141,10 +144,62 @@ class Character(db.Model):
 
         char['name'] = self.name
         char['classes'] = self.get_classes()[0]['class_name']
-        # char['subclass_name'] = self.get_classes()[0].subclass_name
         char['level'] = self.get_classes()[0]['level']
 
         return char
+
+    def get_class_spells(self):
+        '''Makes get request to API for a list of spell indexes that are available
+        to this class. Then we add those indexes to a set and move onto the next class
+        for that character.
+    
+        If no spells are available we return False, otherwise we return the set of spel
+        indexes.'''
+    
+        available_spells = set()
+        for _class in self.get_classes():
+            #make request to api for spells available to the current character class
+            results = requests.get(f'{base_url}/api/classes/{_class["class_name"]}/spells').json()['results']
+
+            #create a set of spell_indexes from the restults of the api call
+            new_spells = {result['index'] for result in results}
+
+         #add the spells to the set of available spells
+            available_spells.update(new_spells)
+
+        if len(available_spells) == 0:
+            return None
+        else:
+            return available_spells
+
+    def get_spell_slots(self):
+        '''Returns a dict with available spell slots'''
+        slots=[]
+        for _class in self.get_classes():
+            #api call to get level info by character class
+            resp = requests.get(f"{base_url}/api/classes/{_class['class_name']}/levels").json()
+
+            #loop through api response to find level info for character level
+            for item in resp:
+                if item['level'] == _class['level']:
+                    slots.append(item['spellcasting'])
+                    #slots[_class] = item['spellcasting']
+    
+        #might want to return a dict with one key for class_name and value of the class name and level, the other for spellcasting ability per class
+        return slots
+
+    def get_highest_spell_level(self, slots_by_class):
+        '''Return the highest available spell slot to for this character'''
+        highest_spell_level = 0
+        # clean spellcasting dict of spell levels with no available spell slots
+        for spell_slots in slots_by_class:
+            for key in list(spell_slots.keys()):
+                if spell_slots[key] == 0 and 'spell_slot' in key:
+                    del spell_slots[key]
+                elif 'spell_slot' in key:
+                    highest_spell_level += 1
+        return highest_spell_level
+
 
     
 

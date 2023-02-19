@@ -1,5 +1,4 @@
 import os
-import requests
 import pdb
 
 from flask import Flask, render_template, request, flash, redirect, session, g
@@ -11,7 +10,6 @@ from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm, SpellLis
 
 
 CURR_USER_KEY = "curr_user"
-base_url = 'https://www.dnd5eapi.co'
 
 app = Flask(__name__)
 
@@ -269,67 +267,42 @@ def delete_char(char_id):
     return redirect(f'/user/{char.user_id}')
     
 
-
+###################### SPELL LIST VIEWS #####################################    
 @app.route('/char/<int:char_id>/spell_list/new', methods=['GET', 'POST'])
 def new_spell_list_form(char_id):
     '''Show form to create a new spell list'''
-
-    # request.method returns HTTP request method. 
 
     char = db.session.get(Character, char_id)
 
     if g.user.id != char.user_id:
         flash("You don't have permission to view this page")
         return redirect(f'/char/{char_id}')
-    
-    # if request.method == 'GET': we can save API requests and databse requests by wrapping
-    # our logic in conditionals depending on if the method is get or post
-
-    ####################################################  
-    # getting spells needs to be moved out of the view function
-    ####################################################
-    stats = char.stats.serialize_stats().items()
-
-    #from char we need to get classes
-    class_list = char.get_classes()
 
     #this is the index of spell names
-    spells = get_class_spells(class_list)
+    spells = char.get_class_spells()
 
-    if spells == False:
+    if spells == None:
         flash(f'No spells available for {char.name}', 'error')
         return redirect(f'/char/{char_id}')
 
     #these are the spell slots available to our character
-    slots_by_class = get_spell_slots(class_list)
+    slots_by_class = char.get_spell_slots()
 
-    #clean the dict so it only contains spell levels that the character has slots avaible
-    highest_spell_level = 0
-    for spell_slots in slots_by_class:
-        for key in list(spell_slots.keys()):
-            if spell_slots[key] == 0 and 'spell_slot' in key:
-                del spell_slots[key]
-            elif 'spell_slot' in key:
-                highest_spell_level += 1
-
-    #get the highest level of spell slot available for the character
-    #there are two keys that make this not work, "cantrips_known", "spells_known"
-    
-    # highest_spell_level = max([len(spell_slots) for spell_slots in slots_by_class if 'spell_slot' in spell_slots.keys()])
+    highest_spell_level = char.get_highest_spell_level(slots_by_class)
                 
-
     #get all spells from our database that have a level less than or equal to the highest level spell slot
-    spell_objects = db.session.query(Spell).filter(Spell.level <= highest_spell_level, Spell.index.in_(spells)).order_by(Spell.level, Spell.name)
+    spell_objects = (db.session.query(Spell).filter(Spell.level <= highest_spell_level, Spell.index.in_(spells))
+                        .order_by(Spell.level, Spell.name))
 
     form = SpellListForm()
     form.spells.choices = [(spell.id, spell.name) for spell in spell_objects]
+    stats = char.stats.serialize_stats().items()
 
     if form.validate_on_submit():
         spell_list = SpellList(char_id=char.id, name=form.data['name'])
 
+        # spells returned with the hidden select field
         selected_spells = form.data['spells']
-
-        # need to take array of spell ids and find them in the database
 
         for spell in spell_objects:
             if spell.id in selected_spells:
@@ -362,36 +335,3 @@ def delete_spell_list(spell_list_id):
     db.session.commit()
 
     return redirect(f'/char/{spell_list.char_id}')
-
-def get_class_spells(class_list):
-    
-    available_spells = set()
-    for _class in class_list:
-        #make request to api for spells available to the current character class
-        results = requests.get(f'{base_url}/api/classes/{_class["class_name"]}/spells').json()['results']
-
-        #create a set of spell_indexes from the restults of the api call
-        new_spells = {result['index'] for result in results}
-
-        #add the spells to the set of available spells
-        available_spells.update(new_spells)
-
-    if len(available_spells) == 0:
-        return False
-    else:
-        return available_spells
-
-def get_spell_slots(class_list):
-    '''Returns a dict with available spell slots'''
-    slots=[]
-    for _class in class_list:
-        #api call to get level info by character class
-        resp = requests.get(f"{base_url}/api/classes/{_class['class_name']}/levels").json()
-
-        #loop through api response to find level info for character level
-        for item in resp:
-            if item['level'] == _class['level']:
-                slots.append(item['spellcasting'])
-    
-    #might want to return a dict with one key for class_name and value of the class name and level, the other for spellcasting ability per class
-    return slots
