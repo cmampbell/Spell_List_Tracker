@@ -22,7 +22,12 @@
         <a href="/signup">Signup</a>
         {% endif %}
     </nav>
-    {% block content %}CONTENT GOES HERE{% endblock %}
+    {% block content %}
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    CONTENT GOES HERE
+    {% endblock %}
 </body>
 
 </html>

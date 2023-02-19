@@ -296,6 +296,10 @@ def new_spell_list_form(char_id):
     #this is the index of spell names
     spells = get_class_spells(class_list)
 
+    if spells == False:
+        flash(f'No spells available for {char.name}')
+        return redirect(f'/char/{char_id}')
+
     #these are the spell slots available to our character
     slots_by_class = get_spell_slots(class_list)
 
@@ -366,7 +370,10 @@ def get_class_spells(class_list):
         #add the spells to the set of available spells
         available_spells.update(new_spells)
 
-    return available_spells
+    if len(available_spells) == 0:
+        return False
+    else:
+        return available_spells
 
 def get_spell_slots(class_list):
     '''Returns a dict with available spell slots'''
