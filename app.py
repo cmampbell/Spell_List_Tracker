@@ -297,7 +297,7 @@ def new_spell_list_form(char_id):
     spells = get_class_spells(class_list)
 
     if spells == False:
-        flash(f'No spells available for {char.name}')
+        flash(f'No spells available for {char.name}', 'error')
         return redirect(f'/char/{char_id}')
 
     #these are the spell slots available to our character
