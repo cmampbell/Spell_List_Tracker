@@ -185,7 +185,6 @@ class Character(db.Model):
                     slots.append(item['spellcasting'])
                     #slots[_class] = item['spellcasting']
     
-        #might want to return a dict with one key for class_name and value of the class name and level, the other for spellcasting ability per class
         return slots
 
     def get_highest_spell_level(self, slots_by_class):
@@ -200,8 +199,6 @@ class Character(db.Model):
                     highest_spell_level += 1
         return highest_spell_level
 
-
-    
 
 class Stats(db.Model):
     '''Model for character stats'''

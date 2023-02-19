@@ -317,6 +317,7 @@ def new_spell_list_form(char_id):
 
 @app.route('/char/<int:char_id>/spell_list/<int:spell_list_id>')
 def show_spell_list_details(char_id, spell_list_id):
+    '''Displays the selected spell list for that character'''
     char = db.session.get(Character, char_id)
 
     spell_list = db.session.get(SpellList, spell_list_id)
@@ -325,6 +326,7 @@ def show_spell_list_details(char_id, spell_list_id):
 
 @app.route('/spell_list/<int:spell_list_id>/delete', methods=['POST'])
 def delete_spell_list(spell_list_id):
+    '''Allows users to delete their spell lists'''
     spell_list = db.session.get(SpellList, spell_list_id)
 
     if g.user.id != spell_list.char.user_id:
