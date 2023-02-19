@@ -10,12 +10,14 @@ from sqlalchemy.exc import IntegrityError
 os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
 
 from app import app, CURR_USER_KEY, add_user_to_g, g
-from seed import seed_db
+# from seed import seed_db_classes
 
 app.app_context().push()
 
-db.create_all()
-seed_db()
+# only needed to seed initial db
+# db.drop_all()
+# db.create_all()
+# seed_db_classes()
 
 #disable WTForms csrf for testing
 app.config['WTF_CSRF_ENABLED'] = False
@@ -136,6 +138,18 @@ class CharacterCreationViewsTestCase(TestCase):
             self.assertEqual(char.name, 'edit_test')
             self.assertEqual(char.stats.HP, 10)
 
+    def test_char_delete(self):
+        '''Does delete character view delete the character?'''
+        char = self.create_test_character()
 
+        with self.client as client:
+            login = {'username': self.user.username, 'password':test_password}
+            client.post('/login', data=login)
 
-            
+            resp = client.post(f'/char/{char.id}/delete')
+
+            #check that we got a redirect
+            self.assertEqual(resp.status_code, 302)
+
+            #check that user doesn't have a character anymore
+            self.assertEqual(len(self.user.characters), 0)

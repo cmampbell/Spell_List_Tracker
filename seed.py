@@ -1,8 +1,6 @@
 import requests
 from sqlalchemy import insert
 
-import pdb
-
 from app import db
 from models import Classes, Subclasses, Spell
 

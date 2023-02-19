@@ -198,6 +198,22 @@ class Character(db.Model):
                 elif 'spell_slot' in key:
                     highest_spell_level += 1
         return highest_spell_level
+    
+    def get_spells_from_db(self, slots):
+        '''Get all available spell objects from db'''
+        # query api for index of spells for characters classes
+        spells = self.get_class_spells()
+
+        if spells == None:
+            return None
+
+        highest_spell_level = self.get_highest_spell_level(slots)
+
+        #get all spells from our database that have a level less than or equal to the highest level spell slot
+        spell_objects = (db.session.query(Spell).filter(Spell.level <= highest_spell_level, Spell.index.in_(spells))
+                            .order_by(Spell.level, Spell.name))
+        
+        return spell_objects
 
 
 class Stats(db.Model):

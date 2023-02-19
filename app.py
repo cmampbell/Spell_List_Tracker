@@ -279,23 +279,16 @@ def new_spell_list_form(char_id):
         return redirect(f'/char/{char_id}')
 
     #this is the index of spell names
-    spells = char.get_class_spells()
+    slots_by_class = char.get_spell_slots()
+    spells = char.get_spells_from_db(slots_by_class)
+
 
     if spells == None:
         flash(f'No spells available for {char.name}', 'error')
         return redirect(f'/char/{char_id}')
 
-    #these are the spell slots available to our character
-    slots_by_class = char.get_spell_slots()
-
-    highest_spell_level = char.get_highest_spell_level(slots_by_class)
-                
-    #get all spells from our database that have a level less than or equal to the highest level spell slot
-    spell_objects = (db.session.query(Spell).filter(Spell.level <= highest_spell_level, Spell.index.in_(spells))
-                        .order_by(Spell.level, Spell.name))
-
     form = SpellListForm()
-    form.spells.choices = [(spell.id, spell.name) for spell in spell_objects]
+    form.spells.choices = [(spell.id, spell.name) for spell in spells]
     stats = char.stats.serialize_stats().items()
 
     if form.validate_on_submit():
@@ -304,7 +297,7 @@ def new_spell_list_form(char_id):
         # spells returned with the hidden select field
         selected_spells = form.data['spells']
 
-        for spell in spell_objects:
+        for spell in spells:
             if spell.id in selected_spells:
                 spell_list.spells.append(spell)
 
@@ -313,7 +306,7 @@ def new_spell_list_form(char_id):
 
         return redirect(f'/char/{char.id}/spell_list/{spell_list.id}')
 
-    return render_template('spell_list/new_spell_list.html', char=char, spells=spell_objects, slots=slots_by_class, stats=stats, form=form)
+    return render_template('spell_list/new_spell_list.html', char=char, spells=spells, slots=slots_by_class, stats=stats, form=form)
 
 @app.route('/char/<int:char_id>/spell_list/<int:spell_list_id>')
 def show_spell_list_details(char_id, spell_list_id):

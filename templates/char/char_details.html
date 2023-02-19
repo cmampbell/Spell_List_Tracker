@@ -7,7 +7,7 @@
 
 <h2>Class</h2>
     {% for _class in char.get_classes() %}
-    <li>Level {{_class.level}} {{_class.class_name}}</li>
+    <li>Level {{_class.level}} {{_class.class_name.capitalize()}}</li>
     {% endfor %}
 <h2>Stats</h2>
 <ul>
