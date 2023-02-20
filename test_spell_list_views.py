@@ -9,6 +9,12 @@ os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
 
 from app import app
 
+app.app_context().push()
+
+#disable WTForms csrf for testing
+app.config['WTF_CSRF_ENABLED'] = False
+app.config['TESTING'] = True
+
 test_password = 'HASHED_PASSWORD'
 
 class SpellListViewsTestCase(TestCase):
@@ -18,11 +24,15 @@ class SpellListViewsTestCase(TestCase):
         User.query.delete()
         Spell.query.delete()
 
-        self.user = User(
-            email="test@hotmail.com",
-            username="testuser",
-            password="HASHED_PASSWORD"
+        self.client = app.test_client()
+
+        self.user = User.signup(
+            username='test_user',
+            password= test_password,
+            email='test@hotmail.com'
         )
+
+        db.session.commit()
 
         self.stats = Stats(            
             HP=10,
@@ -34,13 +44,11 @@ class SpellListViewsTestCase(TestCase):
             CHA=10
         )
 
-        db.session.add(self.user)
-        db.session.commit()
-
         self.char = Character(
             name='TestChar',
-            user_id=self.user.id
         )
+
+        self.user.characters.append(self.char)
 
         char_class = Char_Class(class_id=4, level=4)
 
@@ -66,5 +74,17 @@ class SpellListViewsTestCase(TestCase):
             resp = client.get(f'/char/{self.char.id}/spell_list/new')
             html = resp.get_data(as_text=True)
 
+            #do we get an ok status code
+            self.assertEqual(resp.status_code, 200)
+
             self.assertIn('Cure Wounds', html)
             self.assertIn('Guidance', html)
+            self.assertIn(f'<option value="{self.spell1.id}"', html)
+
+    # def test_new_spell_list_post(self):
+    #     '''Does the new spell list post route work as intended'''
+    #     with self.client as client:
+    #         login = {'username': self.user.username, 'password':test_password}
+    #         client.post('/login', data=login)
+
+    #         resp
