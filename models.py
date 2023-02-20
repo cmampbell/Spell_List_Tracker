@@ -204,9 +204,6 @@ class Character(db.Model):
         # query api for index of spells for characters classes
         spells = self.get_class_spells()
 
-        if spells == None:
-            return None
-
         highest_spell_level = self.get_highest_spell_level(slots)
 
         #get all spells from our database that have a level less than or equal to the highest level spell slot

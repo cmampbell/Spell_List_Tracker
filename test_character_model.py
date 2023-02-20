@@ -3,7 +3,7 @@
 import os
 from unittest import TestCase
 
-from models import db, User, Character, Stats, Classes, Char_Class
+from models import db, User, Character, Stats, Char_Class, Spell
 from sqlalchemy.exc import IntegrityError
 
 os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
@@ -156,6 +156,7 @@ class CharacterModelMethodsTestCase(TestCase):
     def setUp(self):
         Character.query.delete()
         User.query.delete()
+        Spell.query.delete()
 
         self.user = User(
             email="test@hotmail.com",
@@ -227,6 +228,17 @@ class CharacterModelMethodsTestCase(TestCase):
         self.assertTrue(isinstance(slots, list))
         self.assertIn('spell_slots_level_1', keys)
 
+    def test_get_spell_slots_no_spells(self):
+        char_class = Char_Class(class_id=1, level=4)
+        self.char.classes.pop()
+        self.char.classes.append(char_class)
+        db.session.commit()
+
+        slots = self.char.get_spell_slots()
+
+        #check that slots is an empty array
+        self.assertEqual(len(slots), 0)
+
     def test_get_highest_spell_level(self):
         '''Does get_highest_spell_level return
         the highest available spell level?'''
@@ -237,3 +249,33 @@ class CharacterModelMethodsTestCase(TestCase):
         self.assertIsNotNone(highest_spell_level)
         self.assertGreater(highest_spell_level, 0)
         self.assertTrue(highest_spell_level < 10)
+
+    def add_spells_to_db(self):
+        '''Add spells to test db for testing purposes'''
+        self.spell1 = Spell(index='cure-wounds', name='Cure Wounds', level=1)
+        self.spell2 = Spell(index='guidance', name='Guidance', level=0)
+        db.session.add(self.spell1)
+        db.session.add(self.spell2)
+        db.session.commit()
+
+    def test_get_spells_from_db(self):
+        '''Does the get spells from db method return a list
+        of available spells for that character?'''
+
+        slots = self.char.get_spell_slots()
+
+        self.add_spells_to_db()
+        spell_objects = self.char.get_spells_from_db(slots)
+
+        spells = [(spell.id, spell.name) for spell in spell_objects]
+
+        # check that the method returned the two spells in our db
+        self.assertEqual(len(spells), 2)
+
+        self.assertIn((self.spell1.id, self.spell1.name), spells)
+        self.assertIn((self.spell2.id, self.spell2.name), spells)
+
+
+
+
+

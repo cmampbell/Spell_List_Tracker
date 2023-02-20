@@ -281,11 +281,12 @@ def new_spell_list_form(char_id):
     #get spell slots available to character
     slots_by_class = char.get_spell_slots()
     #get all spells in db available to character
-    spells = char.get_spells_from_db(slots_by_class)
 
-    if spells == None:
+    if len(slots_by_class) == 0:
         flash(f'No spells available for {char.name}', 'error')
         return redirect(f'/char/{char_id}')
+    
+    spells = char.get_spells_from_db(slots_by_class)
 
     form = SpellListForm()
     form.spells.choices = [(spell.id, spell.name) for spell in spells]
