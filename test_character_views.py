@@ -25,7 +25,7 @@ app.config['TESTING'] = True
 
 test_password = 'HASHED_PASSWORD'
 
-class CharacterCreationViewsTestCase(TestCase):
+class CharacterViewsTestCase(TestCase):
     '''Tests for character view functions'''
 
     def setUp(self):

@@ -4,7 +4,6 @@ import os
 from unittest import TestCase
 
 from models import db, User, Character, Stats, Char_Class, Spell
-from sqlalchemy.exc import IntegrityError
 
 os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
 
