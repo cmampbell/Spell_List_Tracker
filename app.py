@@ -6,7 +6,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from models import db, connect_db, User, Character, Stats, Char_Class, Classes, Spell, SpellList
-from forms import UserSignUpForm, UserLoginForm, CharacterCreationForm, SpellListForm
+from forms import UserSignUpForm, UserLoginForm, DeleteUserForm, CharacterCreationForm, SpellListForm 
 
 
 CURR_USER_KEY = "curr_user"
@@ -116,6 +116,7 @@ def show_home_page():
 
     if g.user:
         user = g.user
+        return redirect(f'/user/{user.id}')
 
     else:
         user = None
@@ -131,7 +132,7 @@ def show_user_page(user_id):
 
     return render_template('users/details.html', user=g.user, chars=g.user.characters)
 
-@app.route('/user/<int:user_id>/delete', methods=['POST'])
+@app.route('/user/<int:user_id>/delete', methods=['GET','POST'])
 def delete_user(user_id):
     '''Delete users account'''
     user = db.session.get(User, user_id)
@@ -140,18 +141,24 @@ def delete_user(user_id):
         flash("You can't access this page")
         redirect('/')
 
-    # Delete the users characters first
-    for char in user.characters:
-        db.session.delete(char)
+    form = DeleteUserForm()
 
-    db.session.commit()
+    if form.validate_on_submit():
 
-    #then delete user
-    db.session.delete(user)
-    db.session.commit()
+        # Delete the users characters first
+        for char in user.characters:
+            db.session.delete(char)
 
-    flash(f'Deleted {user.username} account')
-    return redirect('/')
+        db.session.commit()
+
+        #then delete user
+        db.session.delete(user)
+        db.session.commit()
+
+        flash(f'Deleted {user.username} account')
+        return redirect('/')
+    
+    return render_template('users/delete.html', user=user, form=form)
 
 
 ################### CHARACTER VIEWS #########################

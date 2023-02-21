@@ -6,8 +6,6 @@ const spellContainer = document.getElementById("spell-cards-div")
 const spellOptions = document.querySelectorAll("option")
 // select field for form
 const formSelectField = document.getElementById("spells");
-// bootstrap modal for spell info
-const $spellModal = $("#spellModal")
 
 const base_url = 'https://www.dnd5eapi.co'
 
@@ -159,12 +157,3 @@ function start() {
 }
 
 window.addEventListener("DOMContentLoaded", start)
-
-
-
-// TODO:
-
-// Should refactor these functions into OOP
-// Should refactor server-side spell list functions into OOP, put them as methods in the
-//      character model
-// Write tests!!!!!

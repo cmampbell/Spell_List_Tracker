@@ -73,16 +73,16 @@ div.large {
     align-items: center;
 }
 
-nav > a{
+nav > a, .settings{
     color: rgb(250, 250, 250);
     font-size: 1.2rem;
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
 }
 
-nav > a:hover {
+nav > a:hover, .settings:hover {
     color: antiquewhite;
-    font-weight: bold;
+    /* font-weight: bold; */
     text-decoration: none;
 }
 
@@ -122,4 +122,20 @@ body {
     font-weight: bold;
 }
 
-/* ########## SIGN UP PAGE ############## */
+/* ########## USER DETAILS PAGE ############## */
+
+/* .delete-button {
+    position: absolute;
+    top: 30px;
+    align-self: flex-end;
+} */
+
+.user-title {
+    display:inline-flex;
+}
+
+.delete-button {
+    align-self: center;
+    font-size: .8rem;
+    margin-left: 45px;
+}

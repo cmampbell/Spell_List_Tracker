@@ -1,6 +1,6 @@
 """Forms for Spell Tracker app."""
 
-from wtforms import StringField, PasswordField, SelectField, SelectMultipleField, validators, ValidationError
+from wtforms import StringField, PasswordField, SelectField, SelectMultipleField, BooleanField, validators, ValidationError
 from flask_wtf import FlaskForm
 from wtforms_alchemy import model_form_factory, ModelFormField
 from models import db, User, Character, Stats, Classes, Char_Class
@@ -37,6 +37,9 @@ class UserLoginForm(FlaskForm):
     '''Login for for Users.'''
     username = StringField('Username', [validators.DataRequired()])
     password = PasswordField('Password', [validators.DataRequired()])
+
+class DeleteUserForm(FlaskForm):
+    '''Form for users to confirm they want to delete their account'''
 
 class CharacterModelForm(ModelForm):
     class Meta:
