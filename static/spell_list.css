@@ -46,3 +46,80 @@ div.large {
     width: 40rem;
     height: auto;
 }
+
+/* ########## NAVBAR ############## */
+#navbar {
+    background-color: rgba(161, 0, 0, 0.8);
+    height: 1.85rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+#footer {
+    background-color: rgba(48, 48, 48, 0.712);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: rgba(250, 235, 215, 0.596);
+    font-size: .85rem;
+}
+
+.content {
+    margin-top: 1.85rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+nav > a{
+    color: rgb(250, 250, 250);
+    font-size: 1.2rem;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+}
+
+nav > a:hover {
+    color: antiquewhite;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+body {
+    color: rgb(0, 0, 0);
+    /* background-image: url("/static/images/pexels-eva-bronzini-7598248.jpg"); */
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.nav-links{
+    float: left;
+    padding-left: .8rem;
+}
+
+.acct-links{
+    float: right;
+    padding-right: .8rem;
+}
+
+/* ########## HOME PAGE ############## */
+
+.title {
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
+.sign-up-button {
+    border: none;
+    color: antiquewhite;
+    background-color: rgba(161, 0, 0, 0.8);
+    padding: .65rem;
+    border-radius: 5px;
+}
+
+.sign-up-button:hover {
+    font-weight: bold;
+}
+
+/* ########## SIGN UP PAGE ############## */

@@ -1,9 +1,9 @@
 """Forms for Spell Tracker app."""
 
-from wtforms import StringField, PasswordField, SelectField, SelectMultipleField, validators
+from wtforms import StringField, PasswordField, SelectField, SelectMultipleField, validators, ValidationError
 from flask_wtf import FlaskForm
 from wtforms_alchemy import model_form_factory, ModelFormField
-from models import db, Character, Stats, Classes, Char_Class
+from models import db, User, Character, Stats, Classes, Char_Class
 
 BaseModelForm = model_form_factory(FlaskForm)
 
@@ -22,6 +22,16 @@ class UserSignUpForm(FlaskForm):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('Username already taken')
+        
+    def validate_email(self, email):
+        email = User.query.filter_by(email=email.data).first()
+        if email:
+            raise ValidationError('Email already in use')
 
 class UserLoginForm(FlaskForm):
     '''Login for for Users.'''

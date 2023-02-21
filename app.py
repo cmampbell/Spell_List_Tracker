@@ -67,24 +67,19 @@ def signup():
     form = UserSignUpForm()
 
     if form.validate_on_submit():
-        try:
-            user = User.signup(
+        user = User.signup(
                 username=form.username.data,
                 password=form.password.data,
                 email=form.email.data
-            )
-            db.session.commit()
-
-        except IntegrityError:
-            flash("Username already taken")
-            return render_template('users/signup.html', form=form)
+                )
+        db.session.commit()
 
         do_login(user)
 
         return redirect("/")
 
-    else:
-        return render_template('users/signup.html', form=form)
+    
+    return render_template('users/signup.html', form=form)
     
 @app.route('/login', methods=["GET", "POST"])
 def login():

@@ -2,11 +2,15 @@
 
 {% block title %}Spell Tracker{% endblock %} 
 
-{% block content %} 
-<h1>Home Page!</h1>
+{% block content %}
+
+<h1 class="title">Dungeons and Dragons Spell Tracker</h1>
+<p>Keep track of all your characters spell lists! Sign up, create a character, and start making
+    your lists!
+</p>
 
 <form action="/signup">
-    <input type="submit" value="Register!">
+    <input id="submit" class="sign-up-button" type="submit" value="Sign Up!">
 </form>
 
 {% endblock %}
