@@ -4,19 +4,22 @@
 
 {% block content %}
 
+<h2 class="title">Login!</h2>
 <form method="POST" id="user_form">
     {{ form.hidden_tag() }}
 
     {% for field in form if field.widget.input_type != 'hidden' %}
-        {% for error in field.errors %}
-            <span>{{ error }}</span>
-        {% endfor %}
+    <div class="form-group">
 
-        {{ field(placeholder=field.label.text) }}
-
+    {{ field.label }}
+    {{ field(placeholder=field.label.text, class="form-control") }}
+    {% for error in field.errors %}
+    <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+    </div>
     {% endfor %}
 
-    <input type="submit" value="Login!">
+    <input type="submit" id="submit" class="sign-up-button" value="Login!">
 </form>
 
 {% endblock %}

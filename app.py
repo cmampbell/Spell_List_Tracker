@@ -76,7 +76,7 @@ def signup():
 
         do_login(user)
 
-        return redirect("/")
+        return redirect(f"/user/{user.id}")
 
     
     return render_template('users/signup.html', form=form)
