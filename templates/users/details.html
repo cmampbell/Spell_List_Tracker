@@ -3,7 +3,12 @@
 {% block title %}{{user.username}} Characters{% endblock %}
 
 {% block content %}
-<h1>{{user.username}} Characters</h1>
+
+<h1 class="title">{{user.username.capitalize()}} Characters</h1>
+
+{% if user.characters|length == 0 %}
+<p>Looks like you don't have any characters!</p>
+{% endif %}
 
 <ul>
     {% for char in chars %}
@@ -11,12 +16,6 @@
     {% endfor %}
 </ul>
 
-<form action="/characters/new">
-    <input type="submit" value="Create a character!">
-</form>
-
-<form action="/user/{{user.id}}/delete" method="POST">
-    <button class="btn btn-danger">Delete User</button>
-</form>
+<a href="/characters/new" class="btn btn-outline-primary">Create a character!</a>
 
 {% endblock %}
