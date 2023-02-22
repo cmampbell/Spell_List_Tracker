@@ -29,15 +29,17 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-4 slots-container">
+            <div class="col-4 spell-slots-container">
                 <div class="row">
                     <h2>Available Spell Slots</h2>
                 </div>
+                <div class="spell-slots">
                 {% for slot in slots %}
-                {% for spell_level, num in slot.items() %}
-                <div class="row">{{spell_level}}: {{num}}</div>
+                    {% for spell_level, num in slot.items() %}
+                        <div class="row spell-slot">{{spell_level}}:<span class="amount">{{num}}</span></div>
+                    {% endfor %}
                 {% endfor %}
-                {% endfor %}
+            </div>
             </div>
         </div>
     </div>

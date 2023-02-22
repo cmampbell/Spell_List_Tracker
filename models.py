@@ -189,14 +189,19 @@ class Character(db.Model):
 
     def get_highest_spell_level(self, slots_by_class):
         '''Return the highest available spell slot to for this character'''
-        highest_spell_level = 0
         # clean spellcasting dict of spell levels with no available spell slots
+        highest_spell_level = 0
         for spell_slots in slots_by_class:
             for key in list(spell_slots.keys()):
                 if spell_slots[key] == 0 and 'spell_slot' in key:
                     del spell_slots[key]
-                elif 'spell_slot' in key:
-                    highest_spell_level += 1
+                elif 'spell_slot' in key or 'cantrip':
+                    new_key = key.replace('_', ' ').title()
+                    spell_slots[new_key] = spell_slots[key]
+                    del spell_slots[key]
+            highest_spell_level = len(spell_slots)
+            if highest_spell_level < len(spell_slots):
+                highest_spell_level = len(spell_slots)
         return highest_spell_level
     
     def get_spells_from_db(self, slots):

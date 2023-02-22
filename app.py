@@ -115,9 +115,8 @@ def logout():
 def show_home_page():
 
     if g.user:
-        user = g.user
-        flash(f'Welcome back {user.name}!', 'success')
-        return redirect(f'/user/{user.id}')
+        flash(f'Welcome back {g.user.username}!', 'success')
+        return redirect(f'/user/{g.user.id}')
 
     else:
         user = None

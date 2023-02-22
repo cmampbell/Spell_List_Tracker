@@ -154,6 +154,7 @@ function start() {
 
     const clearButton = document.getElementById('clear-button')
     clearButton.addEventListener("click", clearSpellList)
+
 }
 
 window.addEventListener("DOMContentLoaded", start)
