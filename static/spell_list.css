@@ -133,7 +133,7 @@ body {
 
 /* ########## NEW CHAR PAGE ############## */
 
-label, input {
+label {
     text-transform: capitalize;
 }
 
@@ -141,6 +141,8 @@ label, input {
 
 .char-class-name {
     font-style: italic;
+    font-weight: bold;
+    font-size: 1.6rem;
 }
 
 .stat {
@@ -160,6 +162,7 @@ label, input {
 .stat-key{
     margin: .2rem;
     padding: .1rem;
+    font-weight: bold;
 }
 
 #char-name {

@@ -5,13 +5,7 @@
 {% block content %}
 <div class="container char-name-container">
     <div class="row justify-content-start align-items-center">
-        <h1 id="char-name">{{char.name}}, <span class="char-class-name">
-                {% for _class in char.get_classes() %}
-                level {{_class.level}} {{_class.class_name.capitalize()}}
-                {% if char.get_classes()|length > 1 %}, {% endif %}
-                {% endfor %}
-            </span>
-        </h1>
+        <h1 id="char-name">{{char.name}}</h1> 
         {% if owner %}
         <a href="/char/{{char.id}}/edit"><i class="fa-solid fa-pen-to-square"></i></a>
         <form action="/char/{{char.id}}/delete" method="POST">
@@ -19,6 +13,13 @@
         </form>
         {% endif %}
     </div>
+    <div class="row char-class-name">
+                {% for _class in char.get_classes() %}
+                Level {{_class.level}} {{_class.class_name.capitalize()}}
+                {% if char.get_classes()|length > 1 %}, {% endif %}
+                {% endfor %}
+    </div>
+
 </div>
 <div class="container stats-container">
     <div class="row justify-content-start">
