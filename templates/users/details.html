@@ -6,19 +6,40 @@
 
 <h1 class="title">{{user.username.capitalize()}}</h1>
 
-<section class="character-section">
-<h2 class="characters">Characters</h2>
-{% if user.characters|length == 0 %}
-<p>Looks like you don't have any characters!</p>
-{% else %}
-<ul>
-    {% for char in chars %}
-        <li><a href="/char/{{char.id}}">{{char.name}}</a></li>
-    {% endfor %}
-</ul>
-{% endif %}
-</section>
-
-<a href="/characters/new" class="btn btn-outline-primary">Create a character!</a>
+<div class="container character-container">
+    <div class="row justify-content-start">
+        <div class="col">
+            <h2 class="characters">Characters</h2>
+            {% if user.characters|length == 0 %}
+            <p>Looks like you don't have any characters!</p>
+            {% else %}
+            <ul>
+                {% for char in chars %}
+                <li><a href="/char/{{char.id}}">{{char.name}}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <a href="/characters/new" class="btn btn-outline-primary">Create a character!</a>
+        </div>
+        <div class="col">
+            <h2 class="spell-lists">Spell Lists</h2>
+            <ul>
+                {% if user.characters|length != 0 %}
+                    {% for char in user.characters %}
+                        {% if char.spell_lists|length == 0 and loop.first %}
+                            <p>Make a spell list!</p>
+                        {% else %}
+                            {% for list in char.spell_lists %}
+                                <li><a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a> - <em>{{ char.name }} - Created On: {{list.date}} </em></li>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>Create a chracter to create a spell list!</p>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

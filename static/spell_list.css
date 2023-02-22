@@ -67,6 +67,7 @@ div.large {
 
 .content {
     margin-top: 1.85rem;
+    margin-left: 1.85rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -123,6 +124,12 @@ body {
 }
 
 /* ########## USER DETAILS PAGE ############## */
+
+.character-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
 
 /* ########## NEW CHAR PAGE ############## */
 
