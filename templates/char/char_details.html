@@ -28,7 +28,9 @@
             <div class="row">
                 {% for key, value in stats %}
                     <div class="col stat stat-{{key}}"><span class="stat-key">{{key}}</span> {{value}}</div>
-                    {% if loop.index0 % 2 == 0 or loop.first %}
+                    {% if loop.last %}
+                    </div>
+                    {% elif loop.index is odd %}
                     </div>
                     <div class="row">
                     {% endif %}
@@ -36,16 +38,15 @@
                 
             </div>
 
-        </div>
-
 
         <div class="col-4 offset-4">
-            <div class="row align-items-center justify-content-start">
+        <div class="row align-items-center justify-content-start">
             <h2>Spell Lists</h2>
             {% if owner %}
-            <a href="/char/{{char.id}}/spell_list/new" class="offset-1"><i class="fa-solid fa-plus add-button"></i></a>
+            <a href="/char/{{char.id}}/spell_list/new" class="offset-2"><i class="fa-solid fa-plus add-button"></i></a>
             {% endif %}
         </div>
+        <div class="row">
                 {% if char.spell_lists|length > 0 %}
                     {% for list in char.spell_lists %}
                         <a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a>
