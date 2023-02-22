@@ -137,7 +137,49 @@ label, input {
     text-transform: capitalize;
 }
 
-/* #char_form {
-    display: flex;
-    flex-direction: column;
-} */
+/* ########## CHAR DETAILS PAGE ############## */
+
+.char-class-name {
+    font-style: italic;
+}
+
+.stat {
+    font-size: 1.2rem;
+    margin-right: .3rem;
+    margin-top: .3rem;
+    margin-bottom: .3rem;
+    background-color: antiquewhite;
+    border: 2px;
+    border-style: groove;
+    border-color: black;
+    border-radius: 20%;
+    text-align: center;
+    
+}
+
+.stat-key{
+    margin: .2rem;
+    padding: .1rem;
+}
+
+#char-name {
+    margin-right: 1rem;
+}
+
+.delete-char {
+    color: red;
+    background-color: rgba(165, 42, 42, 0);
+    border: none;
+}
+
+.delete-char:hover {
+    color: rgb(185, 0, 0);
+    cursor: pointer;
+}
+
+.add-button {
+    padding: .3rem;
+    color: white;
+    background-color: green;
+    border-radius: 25%;
+}

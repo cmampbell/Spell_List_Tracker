@@ -3,31 +3,57 @@
 {% block title %}{{char.name}} Characters{% endblock %}
 
 {% block content %}
-<h1>{{char.name}}</h1>
+<div class="container char-name-container">
+    <div class="row justify-content-start align-items-center">
+        <h1 id="char-name">{{char.name}}, <span class="char-class-name">
+                {% for _class in char.get_classes() %}
+                level {{_class.level}} {{_class.class_name.capitalize()}}
+                {% if char.get_classes()|length > 1 %}, {% endif %}
+                {% endfor %}
+            </span>
+        </h1>
+        {% if owner %}
+        <a href="/char/{{char.id}}/edit"><i class="fa-solid fa-pen-to-square"></i></a>
+        <form action="/char/{{char.id}}/delete" method="POST">
+            <button type="submit" class="delete-char"><i class="fa-solid fa-trash"></i></button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+<div class="container stats-container">
+    <div class="row justify-content-start">
+        <div class="col-4">
+            <div class="row"><h2>Stats</h2></div>
+            <div class="row">
+                {% for key, value in stats %}
+                    <div class="col stat stat-{{key}}"><span class="stat-key">{{key}}</span> {{value}}</div>
+                    {% if loop.index0 % 2 == 0 or loop.first %}
+                    </div>
+                    <div class="row">
+                    {% endif %}
+                {% endfor %}
+                
+            </div>
 
-<h2>Class</h2>
-    {% for _class in char.get_classes() %}
-    <li>Level {{_class.level}} {{_class.class_name.capitalize()}}</li>
-    {% endfor %}
-<h2>Stats</h2>
-<ul>
-    {% for key, value in stats %}
-    <li>{{key}} {{value}}</li>
-    {% endfor %}
-</ul>
+        </div>
 
-<h2>Spell Lists</h2>
-<ul>
-    {% for list in char.spell_lists %}
-    <a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a>
-    {% endfor %}
-</ul>
-{% if owner %}
-<a href="/char/{{char.id}}/edit" class="btn btn-primary">Edit this character!</a>
-<a href="/char/{{char.id}}/spell_list/new" class="btn btn-success">Make a spell list!</a>
-<form action="/char/{{char.id}}/delete" method="POST">
-    <button class="btn btn-danger">Delete this character</button>
-</form>
-{% endif %}
+
+        <div class="col-4 offset-4">
+            <div class="row align-items-center justify-content-start">
+            <h2>Spell Lists</h2>
+            {% if owner %}
+            <a href="/char/{{char.id}}/spell_list/new" class="offset-1"><i class="fa-solid fa-plus add-button"></i></a>
+            {% endif %}
+        </div>
+                {% if char.spell_lists|length > 0 %}
+                    {% for list in char.spell_lists %}
+                        <a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a>
+                    {% endfor %}
+                {% else %}
+                    <p>You have no spell lists for {{char.name.capitalize()}}</p>
+                {% endif %}
+        </div>
+    </div>
+</div>
 
 {% endblock %}
