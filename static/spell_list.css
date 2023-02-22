@@ -1,19 +1,21 @@
 /* ########## NAVBAR ############## */
 #navbar {
-    background-color: rgba(161, 0, 0, 0.8);
+    background-color: rgb(158, 31, 31);
     height: 1.85rem;
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 1;
 }
 
 #footer {
-    background-color: rgba(48, 48, 48, 0.712);
+    background-color: rgba(48, 48, 48, 1);
     position: fixed;
     bottom: 0;
     width: 100%;
     color: rgba(250, 235, 215, 0.596);
     font-size: .85rem;
+    z-index: 1;
 }
 
 .content {
@@ -140,6 +142,10 @@ label {
 }
 
 /* ########## NEW SPELL LIST PAGE ############## */
+
+#char-details{
+    width: 90%;
+}
 
 #list-creator{
     display: flex;
