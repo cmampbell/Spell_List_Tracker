@@ -3,19 +3,39 @@
 {% block title %}Edit {{char.name}}{% endblock %}
 
 {% block content %}
+<h1>Edit {{ char.name.capitalize() }}</h1>
 <form method="POST" id="char_form">
     {{ form.hidden_tag() }}
 
-    {% for field in form if field.widget.input_type != 'hidden' %}
+    <div class="form-row char-form">
+        {% for field in form if field.widget.input_type != 'hidden' %}
         {% for error in field.errors %}
-            <span>{{ error }}</span>
+        <span class="text-danger">{{ error }}</span>
         {% endfor %}
+        {% if field.label.text in ['name', 'Class', 'level', 'HP'] %}
 
-        {{ field(placeholder=field.label.text) }}
+        <div class="form-group col-md-3 char-form">
+            {{ field.label }}
+            {{ field(placeholder=field.label.text, class="form-control") }}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="form-row stats-form">
+        {% for field in form if field.widget.input_type != 'hidden' %}
+        {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {% if field.label.text not in ['name', 'Class', 'level', 'HP'] %}
 
-    {% endfor %}
-
-    <input type="submit" value="Save Changes!">
+        <div class="form-group col stats-form">
+            {{ field.label }}
+            {{ field(placeholder=field.label.text, class="form-control") }}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <input class="btn btn-success"type="submit" value="Save Changes!">
 </form>
 
 {% endblock %}

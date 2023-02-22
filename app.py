@@ -96,7 +96,7 @@ def login():
             flash(f"Hello, {user.username}!", "success")
             return redirect(f"/user/{user.id}")
 
-        flash("Invalid credentials.")
+        flash("Invalid credentials.", 'error')
 
     return render_template('users/login.html', form=form)
 
@@ -106,7 +106,7 @@ def logout():
     """Handle logout of user."""
 
     do_logout()
-    flash("Successfully logged out!")
+    flash("Successfully logged out!", 'success')
     return redirect('/')
 
 ###################### USER VIEWS ##########################
@@ -116,6 +116,7 @@ def show_home_page():
 
     if g.user:
         user = g.user
+        flash(f'Welcome back {user.name}!', 'success')
         return redirect(f'/user/{user.id}')
 
     else:
@@ -127,7 +128,7 @@ def show_user_page(user_id):
     '''Take user to their profile page'''
 
     if g.user.id != user_id:
-        flash("You can't access this page")
+        flash("You can't access another users profile", 'error')
         redirect('/')
 
     return render_template('users/details.html', user=g.user, chars=g.user.characters)
@@ -138,7 +139,7 @@ def delete_user(user_id):
     user = db.session.get(User, user_id)
 
     if g.user.id != user_id:
-        flash("You can't access this page")
+        flash("You can't delete another user", 'error')
         redirect('/')
 
     form = DeleteUserForm()
@@ -155,7 +156,7 @@ def delete_user(user_id):
         db.session.delete(user)
         db.session.commit()
 
-        flash(f'Deleted {user.username} account')
+        flash(f'Deleted {user.username} account', 'success')
         return redirect('/')
     
     return render_template('users/delete.html', user=user, form=form)
@@ -168,8 +169,8 @@ def show_character_form():
     '''Renders character form, or creates new character if form validates'''
 
     if not g.user:
-        flash("You can't access this page")
-        redirect('/')
+        flash("You need to be logged in to create a character", 'error')
+        redirect('/login')
 
     form = CharacterCreationForm()
     # Pass in list of character class names from class table
@@ -206,6 +207,7 @@ def show_character_form():
 
         db.session.commit()
 
+        flash(f'Successfully created {char.name}!')
         return redirect(f'/char/{char.id}')
 
     return render_template('char/new.html', form=form)
@@ -239,7 +241,7 @@ def char_edit_form(char_id):
     form.class_id.choices = [(_class.id, _class.name) for _class in db.session.query(Classes).all()]
 
     if g.user.id != char.user_id:
-        flash("You don't have permission to view this page")
+        flash("You can not edit another users characters", 'error')
         return redirect(f'/char/{char_id}')
 
     if form.validate_on_submit():
@@ -250,7 +252,7 @@ def char_edit_form(char_id):
         db.session.add(char)
         db.session.commit()
 
-        flash(f'Succesfully Updated {char.name}')
+        flash(f'Succesfully updated {char.name}', 'success')
         return redirect(f'/char/{char_id}')
 
     return render_template('char/char_edit.html', char=char, form=form)
@@ -260,12 +262,13 @@ def delete_char(char_id):
     char = db.session.get(Character, char_id)
 
     if g.user.id != char.user_id:
-        flash("You don't have permission to view this page")
+        flash("You can not delete another users characters", 'error')
         return redirect(f'/char/{char.id}')
     
     db.session.delete(char)
     db.session.commit()
 
+    flash(f'Successfully deleted {char.name}', 'success')
     return redirect(f'/user/{char.user_id}')
     
 
@@ -277,7 +280,7 @@ def new_spell_list_form(char_id):
     char = db.session.get(Character, char_id)
 
     if g.user.id != char.user_id:
-        flash("You don't have permission to view this page")
+        flash("You can not create a new spell list for another users character", 'error')
         return redirect(f'/char/{char_id}')
 
     #get spell slots available to character
@@ -307,6 +310,7 @@ def new_spell_list_form(char_id):
         db.session.add(spell_list)
         db.session.commit()
 
+        flash(f'Successdully created {spell_list.name} for {char.name}', 'success')
         return redirect(f'/char/{char.id}/spell_list/{spell_list.id}')
 
     return render_template('spell_list/new_spell_list.html', char=char, spells=spells, slots=slots_by_class, stats=stats, form=form)
@@ -326,10 +330,11 @@ def delete_spell_list(spell_list_id):
     spell_list = db.session.get(SpellList, spell_list_id)
 
     if g.user.id != spell_list.char.user_id:
-        flash("You don't have permission to view this page")
+        flash("You can not delete another users spell list", 'error')
         return redirect(f'/char/{spell_list.char.id}')
 
     db.session.delete(spell_list)
     db.session.commit()
 
+    flash(f'Successfully deleted {spell_list.name}', 'success')
     return redirect(f'/char/{spell_list.char_id}')
