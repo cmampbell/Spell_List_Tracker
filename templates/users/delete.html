@@ -9,17 +9,7 @@
     <p>Are you sure you want to delete your account?</p>
     {{ form.hidden_tag() }}
 
-    {% for field in form if field.widget.input_type != 'hidden' %}
-    <div class="form-group">
-
-    {{ field(placeholder=field.label.text, class="form-control") }}
-    {% for error in field.errors %}
-    <span class="text-danger">{{ error }}</span>
-    {% endfor %}
-    </div>
-    {% endfor %}
-
-    <input type="submit" id="submit" class="sign-up-button" value="Delete {{user.username}}">
+    <input type="submit" id="delete-button" class="delete-button" value="Delete {{user.username}}">
 </form>
 
 {% endblock %}

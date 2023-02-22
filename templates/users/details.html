@@ -4,17 +4,20 @@
 
 {% block content %}
 
-<h1 class="title">{{user.username.capitalize()}} Characters</h1>
+<h1 class="title">{{user.username.capitalize()}}</h1>
 
+<section class="character-section">
+<h2 class="characters">Characters</h2>
 {% if user.characters|length == 0 %}
 <p>Looks like you don't have any characters!</p>
-{% endif %}
-
+{% else %}
 <ul>
     {% for char in chars %}
         <li><a href="/char/{{char.id}}">{{char.name}}</a></li>
     {% endfor %}
 </ul>
+{% endif %}
+</section>
 
 <a href="/characters/new" class="btn btn-outline-primary">Create a character!</a>
 

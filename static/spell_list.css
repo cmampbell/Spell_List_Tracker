@@ -110,7 +110,7 @@ body {
     padding-bottom: 30px;
 }
 
-.sign-up-button {
+.sign-up-button, .login-button, .delete-button{
     border: none;
     color: antiquewhite;
     background-color: rgba(161, 0, 0, 0.8);
@@ -118,24 +118,19 @@ body {
     border-radius: 5px;
 }
 
-.sign-up-button:hover {
+.sign-up-button:hover, .login-button:hover, .delete-button:hover {
     font-weight: bold;
 }
 
 /* ########## USER DETAILS PAGE ############## */
 
-/* .delete-button {
-    position: absolute;
-    top: 30px;
-    align-self: flex-end;
+/* ########## NEW CHAR PAGE ############## */
+
+label, input {
+    text-transform: capitalize;
+}
+
+/* #char_form {
+    display: flex;
+    flex-direction: column;
 } */
-
-.user-title {
-    display:inline-flex;
-}
-
-.delete-button {
-    align-self: center;
-    font-size: .8rem;
-    margin-left: 45px;
-}
