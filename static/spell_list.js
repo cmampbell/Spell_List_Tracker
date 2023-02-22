@@ -1,6 +1,7 @@
 //areas to drag and drop spells
 const dropZone = document.getElementById("target")
 const spellContainer = document.getElementById("spell-cards-div")
+const $userTip = $("#user-tip")
 
 // spell options in the hidden multiple select field
 const spellOptions = document.querySelectorAll("option")
@@ -39,6 +40,7 @@ function returnToSpellsOnDrop(evt) {
     let addedSpell = Array.from(spellOptions).find(spell => spell.value == data)
     // set the spell in the hidden select field to true
     addedSpell.selected = false;
+    
 
     spellContainer.appendChild(document.getElementById(data));
 
@@ -71,7 +73,7 @@ function clearSpellList(evt) {
     let spellArray = Array.from(allSpellCards).sort(compare);
 
     //append sorted list back to DOM
-    spellArray.forEach(elem => document.querySelector("#avail-spells").appendChild(elem));
+    spellArray.forEach(elem => spellContainer.appendChild(elem));
 
     //clear options
     Array.from(spellOptions).forEach(elem => elem.selected = false)
@@ -84,10 +86,12 @@ function toggleDropZone() {
     if (dropZone.childElementCount === 0){
         dropZone.classList.remove('has-items');
         dropZone.classList.add('empty-list');
+        $userTip.show()
     }
     else if (dropZone.childElementCount > 0){
         dropZone.classList.remove('empty-list');
         dropZone.classList.add('has-items');
+        $userTip.hide()
     }
 }
 

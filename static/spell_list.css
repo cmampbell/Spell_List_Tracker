@@ -147,35 +147,56 @@ label {
     width: 90%;
 }
 
+.spell-slot {
+    margin-right: .3rem;
+    margin-top: .3rem;
+    margin-bottom: .3rem;
+    text-align: center;
+}
+
 #list-creator{
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
+    width: 90%;
 }
 
 #target{
-    background-color: gray;
-    opacity: 50%;
     border-style: dotted;
-    height: 700px;
+    border-color: rgb(221, 221, 221);
 }
 
-#avail-spells {
-    width: 45%;
+#user-tip {
+    margin-top: 15%;
+    margin-bottom: 15%;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    opacity: 40%;
 }
+
 .empty-list {
-    height: 100%;
-    width: 400px;
+    height: auto;
 }
 
 .has-items {
-    height: auto;
+    height: 100%;
     width: auto;
 }
 
 .spell-card {
     transition-property: height, width;
     transition-duration: .5s;
+}
+.spell-level {
+    font-size: .9rem;
+    font-style: italic;
+}
+
+.spell-info{
+    font-size: .8rem;
+}
+
+.spell-info-head {
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .range {
@@ -187,7 +208,7 @@ label {
 }
 
 div.small {
-    width: 20rem;
+    width: auto;
     height: auto;
 }
 
