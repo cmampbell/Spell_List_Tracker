@@ -55,14 +55,14 @@
                 <form action="#" id="filter-form">
                     <label for="search">Filters:</label>
                     <input type="text" name="search" id="search" placeholder="Seach by Name">
-                    <label for="damage"><i class="fa-solid fa-bolt fa-md damage"></i></label>
+                    <label for="damage"><i class="fa-solid fa-bolt fa-lg damage" title="Damaging"></i></label>
                     <input type="checkbox" id="damage" name="damage">
-                    <label for="heal"><i class="fa-solid fa-kit-medical fa-md heal"></i></label>
+                    <label for="heal"><i class="fa-solid fa-kit-medical fa-lg heal" title="Healing"></i></label>
                     <input type="checkbox" id="heal" name="heal">
-                    <label for="concentration"><i class="fa-solid fa-brain concentration"></i></label>
+                    <label for="concentration"><i class="fa-solid fa-brain concentration fa-lg" title="Requires Concentration"></i></label>
                     <input type="checkbox" id="concentration" name="concentration">
-                    <input type="submit" value="Filter" id="filter-button" name="filter-button">
-                    <input type="button" value="Clear" id="reset-button" name="reset-button">
+                    <input class="btn btn-primary" type="submit" value="Filter" id="filter-button" name="filter-button">
+                    <input class="btn btn-light" type="button" value="Clear" id="reset-button" name="reset-button">
                 </form>
 
                 <div id="spell-cards-div">
