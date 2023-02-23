@@ -16,7 +16,6 @@
 
 <body>
     <nav id="navbar">
-        <a class="nav-links" href="/">Home</a>
         {% if g.user %}
         <div class="dropdown show acct-links" id="settings">
             <a href="#" class="settings dropdown-toggle" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true"
@@ -30,6 +29,7 @@
         </div>
         <a class="nav-links" href="/user/{{g.user.id}}">{{g.user.username}}</a>
         {% else %}
+        <a class="nav-links" href="/">Home</a>
         <a class="acct-links" href="/login">Login</a>
         <a class="acct-links" href="/signup">Signup</a>
         {% endif %}

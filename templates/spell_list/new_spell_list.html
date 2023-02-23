@@ -55,12 +55,18 @@
                 <form action="#" id="filter-form">
                     <label for="search">Filters:</label>
                     <input type="text" name="search" id="search" placeholder="Seach by Name">
-                    <label for="damage"><i class="fa-solid fa-bolt fa-lg damage" title="Damaging"></i></label>
+
+                    <label for="level-input">Spell Level:</label>
+                    <input type="number" name="level-input" id="level-input" placeholder="0">
+                    
                     <input type="checkbox" id="damage" name="damage">
-                    <label for="heal"><i class="fa-solid fa-kit-medical fa-lg heal" title="Healing"></i></label>
+                    <label for="damage"><i class="fa-solid fa-bolt fa-lg damage" title="Damaging"></i></label>
+                    
                     <input type="checkbox" id="heal" name="heal">
-                    <label for="concentration"><i class="fa-solid fa-brain concentration fa-lg" title="Requires Concentration"></i></label>
+                    <label for="heal"><i class="fa-solid fa-kit-medical fa-lg heal" title="Healing"></i></label>
+                    
                     <input type="checkbox" id="concentration" name="concentration">
+                    <label for="concentration"><i class="fa-solid fa-brain concentration fa-lg" title="Requires Concentration"></i></label>
                     <input class="btn btn-primary" type="submit" value="Filter" id="filter-button" name="filter-button">
                     <input class="btn btn-light" type="button" value="Clear" id="reset-button" name="reset-button">
                 </form>
@@ -69,12 +75,12 @@
                     {% for spell in spells %}
                     <div class="card spell-card small" id="{{spell.id}}" draggable="True"
                         data-list-position="{{loop.index}}" data-spell-index="{{spell.index}}">
-                        <h5 class="card-header">{{spell.name}} | <span class="spell-level">Spell Level:
+                        <h5 class="card-header">{{spell.name}} | <span class="spell-level" data-level="{{spell.level}}">Spell Level:
                                 {{spell.level}}</span>
-                            {% if spell.damaging %}<i class="fa-solid fa-bolt fa-md damage"></i></span>
-                            {% elif spell.healing %}<i class="fa-solid fa-kit-medical fa-md heal"></i>
+                            {% if spell.damaging %}<i class="fa-solid fa-bolt fa-md damage" title="Damaging"></i></span>
+                            {% elif spell.healing %}<i class="fa-solid fa-kit-medical fa-md heal" title="Healing"></i>
                             {% endif %}
-                            {% if spell.concentration %}<i class="fa-solid fa-brain fa-md concentration"></i>{% endif %}
+                            {% if spell.concentration %}<i class="fa-solid fa-brain fa-md concentration" title="Requires Concentration"></i>{% endif %}
                         </h5>
                         <div class="card-body">
                             <!-- info in bootstrap grid -->

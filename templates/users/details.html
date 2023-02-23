@@ -15,7 +15,7 @@
             {% else %}
             <ul>
                 {% for char in chars %}
-                <li><a href="/char/{{char.id}}">{{char.name}}</a></li>
+                <li><a href="/char/{{char.id}}" class="character">{{char.name}}</a></li>
                 {% endfor %}
             </ul>
             {% endif %}
@@ -25,15 +25,15 @@
             <h2 class="spell-lists">Spell Lists</h2>
             <ul>
                 {% if user.characters|length != 0 %}
-                    {% for char in user.characters %}
-                        {% if char.spell_lists|length == 0 and loop.first %}
-                            <p>Make a spell list!</p>
-                        {% else %}
+                    {% if user.has_spell_lists() %}
+                        {% for char in user.characters %}
                             {% for list in char.spell_lists %}
                                 <li><a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a> - <em>{{ char.name }} - Created On: {{list.date}} </em></li>
                             {% endfor %}
-                        {% endif %}
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <p>Make a spell list!</p>
+                    {% endif %}
                 {% else %}
                     <p>Create a chracter to create a spell list!</p>
                 {% endif %}

@@ -320,7 +320,11 @@ def show_spell_list_details(char_id, spell_list_id):
 
     spell_list = db.session.get(SpellList, spell_list_id)
 
-    return render_template('spell_list/spell_list_details.html', char=char, list=spell_list)
+    owner = False
+    if (g.user.id == char.user_id):
+        owner = True
+
+    return render_template('spell_list/spell_list_details.html', char=char, list=spell_list, owner=owner)
 
 @app.route('/spell_list/<int:spell_list_id>/delete', methods=['POST'])
 def delete_spell_list(spell_list_id):

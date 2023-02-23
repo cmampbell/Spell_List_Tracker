@@ -101,6 +101,16 @@ class User(db.Model):
             return True
         else:
             return False
+        
+    def has_spell_lists(self):
+        '''This method will determine if a user has any spell lists
+        associated with their account. This makes things easier for us
+        when we are designing the user details page'''
+        for char in self.characters:
+            if len(char.spell_lists) > 0:
+                return True
+        
+        return False
     
 class Character(db.Model):
     '''DnD Character Model for users'''
