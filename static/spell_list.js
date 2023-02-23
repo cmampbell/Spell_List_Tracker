@@ -8,6 +8,10 @@ const spellOptions = document.querySelectorAll("option")
 // select field for form
 const formSelectField = document.getElementById("spells");
 
+//TODO get input checkboxes and text input for front-end filtering of spells
+// TODO add dropdown for school as well
+//TODO add a key in there so people know what the symbols mean
+
 const base_url = 'https://www.dnd5eapi.co'
 
 function allowDrop(evt) {
@@ -95,7 +99,7 @@ function toggleDropZone() {
     }
 }
 
-let origHTML;
+let origHTML = {};
 async function handleCardClick(evt){
     // get spell card
     spellCard = evt.target.closest('.spell-card')
@@ -103,7 +107,7 @@ async function handleCardClick(evt){
 
     if (spellCard.classList.contains('small')){
         // keep initial html for spell card in variable
-        origHTML = spellCard.innerHTML
+        origHTML[spellIndex] = spellCard.innerHTML
 
         //make request to api for spell info
         json = await axios.get(`${base_url}/api/spells/${spellIndex}`)
@@ -113,13 +117,13 @@ async function handleCardClick(evt){
         
     }
     else if (spellCard.classList.contains('large')){
-        spellCard.innerHTML = origHTML
+        spellCard.innerHTML = origHTML[spellIndex]
+        delete origHTML[spellIndex]
     }
     
     //toggle spell card class for css styling
     spellCard.classList.toggle('small')
     spellCard.classList.toggle('large')
-
 }
 
 function updateSpellCard(spell, data){
@@ -127,7 +131,6 @@ function updateSpellCard(spell, data){
 
     let { components, desc, higher_level, material, ritual} = data
     let cardBody;
-    console.log(desc)
     cardBody = spell.querySelector('.card-body')
 
     //this is janky and I need to fix, will do when I get to styling

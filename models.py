@@ -424,8 +424,8 @@ class Spell(db.Model):
             'range': self.range,
             'duration': self.duration,
             'concentration': self.concentration,
-            'casting Time': self.casting_time,
-            'spell Level': self.level,
+            'casting time': self.casting_time,
+            'spell level': self.level,
             'damaging': self.damaging,
             'healing': self.healing,
             'school': self.school

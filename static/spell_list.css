@@ -163,6 +163,11 @@ label {
     border-color: rgb(221, 221, 221);
 }
 
+#spell-cards-div {
+    overflow-y: scroll;
+    height: 600px;
+}
+
 #user-tip {
     margin-top: 15%;
     margin-bottom: 15%;
@@ -213,6 +218,14 @@ div.small {
 }
 
 div.large {
-    width: 40rem;
+    width: auto;
     height: auto;
+}
+
+.damage, .heal {
+    color: crimson;
+}
+
+.concentration {
+    color: rgb(0, 202, 202);
 }
