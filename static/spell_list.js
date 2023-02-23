@@ -227,7 +227,6 @@ function start() {
     formSelectField.hidden = true;
 
     // get all spell cards
-
     const spellCards = spellContainer.children
 
     for (card of spellCards) {

@@ -195,13 +195,15 @@ class Character(db.Model):
             for key in list(spell_slots.keys()):
                 if spell_slots[key] == 0 and 'spell_slot' in key:
                     del spell_slots[key]
-                elif 'spell_slot' in key or 'cantrip':
+                elif 'spell_slot' in key:
+                    highest_spell_level += 1
                     new_key = key.replace('_', ' ').title()
                     spell_slots[new_key] = spell_slots[key]
                     del spell_slots[key]
-            highest_spell_level = len(spell_slots)
-            if highest_spell_level < len(spell_slots):
-                highest_spell_level = len(spell_slots)
+                elif 'cantrip' in key:
+                    new_key = key.replace('_', ' ').title()
+                    spell_slots[new_key] = spell_slots[key]
+                    del spell_slots[key]
         return highest_spell_level
     
     def get_spells_from_db(self, slots):

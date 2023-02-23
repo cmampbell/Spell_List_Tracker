@@ -205,7 +205,7 @@ def show_character_form():
 
         db.session.commit()
 
-        flash(f'Successfully created {char.name}!')
+        flash(f'Successfully created {char.name}!', 'success')
         return redirect(f'/char/{char.id}')
 
     return render_template('char/new.html', form=form)
