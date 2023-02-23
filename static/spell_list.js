@@ -10,9 +10,6 @@ const spellOptions = document.querySelectorAll("option")
 // select field for form
 const formSelectField = document.getElementById("spells");
 
-//TODO add a key in there so people know what the symbols mean
-//TODO get the large spell card display working how I want it to
-
 const base_url = 'https://www.dnd5eapi.co'
 
 function allowDrop(evt) {
