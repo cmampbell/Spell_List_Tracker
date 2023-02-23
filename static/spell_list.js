@@ -2,14 +2,14 @@
 const dropZone = document.getElementById("target")
 const spellContainer = document.getElementById("spell-cards-div")
 const $userTip = $("#user-tip")
+const $filter = $('#filter-button')
+const $reset = $('#reset-button')
 
 // spell options in the hidden multiple select field
 const spellOptions = document.querySelectorAll("option")
 // select field for form
 const formSelectField = document.getElementById("spells");
 
-//TODO get input checkboxes and text input for front-end filtering of spells
-// TODO add dropdown for school as well
 //TODO add a key in there so people know what the symbols mean
 
 const base_url = 'https://www.dnd5eapi.co'
@@ -139,6 +139,64 @@ function updateSpellCard(spell, data){
 
 }
 
+function filterSpells(evt){
+    evt.preventDefault();
+
+    //loop through spell containter
+    let spellCards = Array.from(spellContainer.children);
+    resetAvailSpells()
+
+    let filter = {};
+    for(let elem of $('#filter-form').serializeArray()){
+        filter[elem.name] = elem.value;
+        if (filter[elem.name] == "on"){
+            filter[elem.name] = true;
+        }
+        if (filter[elem.name] == ''){
+            delete filter[elem.name];
+        }
+    }
+
+    // for each spell card
+    for(let spellCard of spellCards){
+        let hideThis = true;
+        // for each key
+        for(let key of Object.keys(filter))
+        // if the innerhtml includes any of the booleans
+        if(spellCard.innerHTML.includes(key)){
+            hideThis = false
+        }
+        //if we have a search param
+        if(filter.search){
+            //search for search string in html
+            if(spellCard.innerHTML.toLowerCase().includes(filter.search.toLowerCase())){
+                hideThis = false
+            }
+        }
+
+        if(hideThis){
+            $(spellCard).hide()
+        }
+    }
+    
+}
+
+function resetAvailSpells(){
+    //loop through spell containter
+    let spellCards = Array.from(spellContainer.children);
+
+    for(let spellCard of spellCards){
+        $(spellCard).show()
+    }
+}
+
+function clearFilters(){
+    $('#search').val('')
+    $('#damage').prop("checked", false)
+    $('#heal').prop("checked", false)
+    $('#concentration').prop("checked", false)
+}
+
 function start() {
 
     // hide the select field with all spell options
@@ -161,6 +219,10 @@ function start() {
 
     const clearButton = document.getElementById('clear-button')
     clearButton.addEventListener("click", clearSpellList)
+
+    $filter.click(filterSpells)
+    $reset.click(resetAvailSpells)
+    $reset.click(clearFilters)
 
 }
 

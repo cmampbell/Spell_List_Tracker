@@ -52,15 +52,18 @@
         <div class="row justify-content-around">
             <div class="col-6" id="avail-spells">
                 <h2>Available Spells</h2>
-                
-                <label for="search">Search By Name:</label>
-                <input type="text" id="search" placeholder="Seach by Name">
-                <label for="damage"><i class="fa-solid fa-bolt fa-xs damage"></i></label>
-                <input type="checkbox" id="damage">
-                <label for="heal"><i class="fa-solid fa-kit-medical fa-xs heal"></i></label>
-                <input type="checkbox" id="heal">
-                <label for="concentration"><i class="fa-solid fa-brain concentration"></i></label>
-                <input type="checkbox" id="concentration">
+                <form action="#" id="filter-form">
+                    <label for="search">Filters:</label>
+                    <input type="text" name="search" id="search" placeholder="Seach by Name">
+                    <label for="damage"><i class="fa-solid fa-bolt fa-md damage"></i></label>
+                    <input type="checkbox" id="damage" name="damage">
+                    <label for="heal"><i class="fa-solid fa-kit-medical fa-md heal"></i></label>
+                    <input type="checkbox" id="heal" name="heal">
+                    <label for="concentration"><i class="fa-solid fa-brain concentration"></i></label>
+                    <input type="checkbox" id="concentration" name="concentration">
+                    <input type="submit" value="Filter" id="filter-button" name="filter-button">
+                    <input type="button" value="Clear" id="reset-button" name="reset-button">
+                </form>
 
                 <div id="spell-cards-div">
                     {% for spell in spells %}
@@ -68,26 +71,28 @@
                         data-list-position="{{loop.index}}" data-spell-index="{{spell.index}}">
                         <h5 class="card-header">{{spell.name}} | <span class="spell-level">Spell Level:
                                 {{spell.level}}</span>
-                                {% if spell.damaging %}<i class="fa-solid fa-bolt fa-xs damage"></i></span>
-                                {% elif spell.healing %}<i class="fa-solid fa-kit-medical fa-xs heal"></i>
-                                {% endif %}
-                                {% if spell.concentration %}<i class="fa-solid fa-brain fa-xs concentration"></i>{% endif %}
-                                </h5>
+                            {% if spell.damaging %}<i class="fa-solid fa-bolt fa-md damage"></i></span>
+                            {% elif spell.healing %}<i class="fa-solid fa-kit-medical fa-md heal"></i>
+                            {% endif %}
+                            {% if spell.concentration %}<i class="fa-solid fa-brain fa-md concentration"></i>{% endif %}
+                        </h5>
                         <div class="card-body">
                             <!-- info in bootstrap grid -->
                             <div class="container spell-info">
                                 <div class="row">
                                     {% for attr, value in spell.serialize_self().items() %}
-                                        {% if attr not in ['name', 'spell level', 'damaging', 'healing', 'concentration'] and value %}
-                                            <div class="head-{{attr}} spell-info-head col">{{attr.title()}}</div>
-                                        {% endif %}
+                                    {% if attr not in ['name', 'spell level', 'damaging', 'healing', 'concentration']
+                                    and value %}
+                                    <div class="head-{{attr}} spell-info-head col">{{attr.title()}}</div>
+                                    {% endif %}
                                     {% endfor %}
                                 </div>
                                 <div class="row">
                                     {% for key, value in spell.serialize_self().items() %}
-                                        {% if key not in ['name', 'spell level', 'damaging', 'healing', 'concentration'] and value %}
-                                            <div class="cell-{{key}} col">{{value}}</div>
-                                        {% endif %}
+                                    {% if key not in ['name', 'spell level', 'damaging', 'healing', 'concentration'] and
+                                    value %}
+                                    <div class="cell-{{key}} col">{{value}}</div>
+                                    {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>
