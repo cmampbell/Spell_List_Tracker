@@ -127,35 +127,35 @@ async function handleCardClick(evt) {
 function updateSpellCard(spell, data) {
     //card is html, spell is json data
 
-    let { components, desc, higher_level, material, ritual, area_of_effect, attack_type, damage} = data
+    let { components, desc, higher_level, material, ritual, area_of_effect, attack_type, damage } = data
 
     let cardBody = spell.querySelector('.card-body');
 
     cardBody.innerHTML += (`<p>Components: ${components.join(', ')}</p> <p>Description: ${desc.join(" <br> ")}</p>`)
 
-    if(damage){
-        if('damage_type' in damage){
+    if (damage) {
+        if ('damage_type' in damage) {
             cardBody.innerHTML += (`<p>Damage Type: ${damage.damage_type.name}`)
         }
     }
 
-    if(attack_type){
+    if (attack_type) {
         cardBody.innerHTML += `<p>Attack Type: ${attack_type.charAt(0).toUpperCase() + attack_type.slice(1)}</p>`
     }
 
-    if(area_of_effect){
-        cardBody.innerHTML +=`<p>Area of Effect: ${area_of_effect.size} ft. ${area_of_effect.type}</p>`
+    if (area_of_effect) {
+        cardBody.innerHTML += `<p>Area of Effect: ${area_of_effect.size} ft. ${area_of_effect.type}</p>`
     }
 
-    if(material){
+    if (material) {
         cardBody.innerHTML += `<p>Material: ${material}</p>`
     }
 
-    if(higher_level.length > 0){
+    if (higher_level.length > 0) {
         cardBody.innerHTML += `<p>Higher Level: ${higher_level}</p>`
     }
 
-    if(ritual){
+    if (ritual) {
         cardBody.innerHTML += `<p>This spell is a ritual</p>`
     }
 }
@@ -165,8 +165,11 @@ function filterSpells(evt) {
 
     //loop through spell containter
     let spellCards = Array.from(spellContainer.children);
-    resetAvailSpells()
 
+    // hide all spells
+    spellCards.forEach(spellCard => $(spellCard).hide());
+
+    // get filter inputs user selected
     let filter = {};
     for (let elem of $('#filter-form').serializeArray()) {
         filter[elem.name] = elem.value;
@@ -178,28 +181,36 @@ function filterSpells(evt) {
         }
     }
 
-    // for each spell card
-    for (let spellCard of spellCards) {
-        let hideThis = true;
-        // for each key
-        for (let key of Object.keys(filter))
-            // if the innerhtml includes any of the booleans
-            if (spellCard.innerHTML.includes(key)) {
-                hideThis = false
-            }
-        //if we have a search param
-        if (filter.search) {
-            //search for search string in html
+    // if user wants to search by name
+    if (filter.search) {
+        spellCards = spellCards.filter(spellCard => {
             if (spellCard.innerHTML.toLowerCase().includes(filter.search.toLowerCase())) {
-                hideThis = false
+                return true
             }
-        }
-
-        if (hideThis) {
-            $(spellCard).hide()
-        }
+        })
     }
 
+    // if user wants to filter by level
+    if (filter['level-input']) {
+        spellCards = spellCards.filter(spellCard => {
+            if (spellCard.dataset.level == filter['level-input']){
+                return true
+            }
+        })
+    }
+
+    for (let key of Object.keys(filter)) {
+        // if user wants to filter by concentration, damage, or healing
+        if (key && key != 'search' && key != 'level-input')
+            spellCards = spellCards.filter(spellCard => {
+                if (spellCard.innerHTML.includes(key)) {
+                    return true
+                }
+            })
+    }
+
+    // show the DOM elements that meet the criteria
+    spellCards.forEach(spellCard => $(spellCard).show())
 }
 
 function resetAvailSpells() {
@@ -216,6 +227,7 @@ function clearFilters() {
     $('#damage').prop("checked", false)
     $('#heal').prop("checked", false)
     $('#concentration').prop("checked", false)
+    $('#level-input').val('')
 }
 
 function start() {

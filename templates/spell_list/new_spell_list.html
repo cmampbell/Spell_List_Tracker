@@ -74,8 +74,8 @@
                 <div id="spell-cards-div">
                     {% for spell in spells %}
                     <div class="card spell-card small" id="{{spell.id}}" draggable="True"
-                        data-list-position="{{loop.index}}" data-spell-index="{{spell.index}}">
-                        <h5 class="card-header">{{spell.name}} | <span class="spell-level" data-level="{{spell.level}}">Spell Level:
+                        data-list-position="{{loop.index}}" data-spell-index="{{spell.index}}" data-level="{{spell.level}}">
+                        <h5 class="card-header">{{spell.name}} | <span class="spell-level">Spell Level:
                                 {{spell.level}}</span>
                             {% if spell.damaging %}<i class="fa-solid fa-bolt fa-md damage" title="Damaging"></i></span>
                             {% elif spell.healing %}<i class="fa-solid fa-kit-medical fa-md heal" title="Healing"></i>
