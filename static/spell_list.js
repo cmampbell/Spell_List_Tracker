@@ -26,6 +26,7 @@ function addToListOnDrop(evt) {
 
     // find the spell that was added to the list
     let addedSpell = Array.from(spellOptions).find(spell => spell.value == data)
+
     // set the spell in the hidden select field to true
     addedSpell.selected = true;
 
@@ -40,9 +41,9 @@ function returnToSpellsOnDrop(evt) {
 
     // find the spell that was added to the list
     let addedSpell = Array.from(spellOptions).find(spell => spell.value == data)
+
     // set the spell in the hidden select field to true
     addedSpell.selected = false;
-
 
     spellContainer.appendChild(document.getElementById(data));
 

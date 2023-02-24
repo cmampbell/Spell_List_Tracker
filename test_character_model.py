@@ -8,8 +8,8 @@ from models import db, User, Character, Stats, Char_Class, Spell
 os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
 
 from app import app
-# from seed import seed_db_classes
 
+# only needed to seed initial db
 # db.drop_all()
 # db.create_all()
 # seed_db_classes()

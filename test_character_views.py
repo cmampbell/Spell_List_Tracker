@@ -5,12 +5,11 @@ from unittest import TestCase
 from flask import session
 
 from models import db, User, Character, Stats, Char_Class
-from sqlalchemy.exc import IntegrityError
 
 os.environ['DATABASE_URL'] = 'postgresql:///spell-tracker-test'
 
-from app import app, CURR_USER_KEY, add_user_to_g, g
-# from seed import seed_db_classes
+from app import app, CURR_USER_KEY
+
 
 app.app_context().push()
 

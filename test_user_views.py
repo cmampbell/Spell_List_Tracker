@@ -1,5 +1,4 @@
 '''User view function tests'''
-#test with python -m unittest test_user_views.py
 
 import os
 from unittest import TestCase
@@ -84,9 +83,6 @@ class UserViewTestCase(TestCase):
         '''Test user logout method'''
 
         with self.client as client:
-            # do login
-            # session_transaction seemed to work on a seperate session
-            # do_logout() did not see session_transaction session
             data={
                 'username': self.user.username,
                 'password': test_password

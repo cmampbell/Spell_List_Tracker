@@ -47,7 +47,6 @@ class CharacterModelForm(ModelForm):
 
 class ClassModelForm(CharacterModelForm):
     class_id = SelectField('Class', coerce=int)
-    # subclasses = SelectField('Subclass')
 
 class CharClassModelForm(ClassModelForm):
     class Meta:

@@ -38,13 +38,11 @@ nav > a, .settings{
 
 nav > a:hover, .settings:hover {
     color: antiquewhite;
-    /* font-weight: bold; */
     text-decoration: none;
 }
 
 body {
     color: rgb(0, 0, 0);
-    /* background-image: url("/static/images/pexels-eva-bronzini-7598248.jpg"); */
     background-repeat: no-repeat;
     background-size: cover;
 }

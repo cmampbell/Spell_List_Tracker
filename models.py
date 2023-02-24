@@ -140,7 +140,12 @@ class Character(db.Model):
     spell_lists = db.relationship('SpellList', cascade="all, delete-orphan", backref='char')
 
     def get_classes(self):
-        '''Returns a list of classes for this character'''
+        '''Returns a list of classes for this character
+        
+        This was structured to return an array in order to
+        allow for characters to have multiple classes. 
+        
+        The multiclass functionality is not implemented yet'''
         if len(self.classes) != 0:
             return [{'level':_class.level, 'class_name':_class.class_name.index} for _class in self.classes]
         else:
@@ -153,6 +158,7 @@ class Character(db.Model):
         char = self.stats.serialize_stats()
 
         char['name'] = self.name
+        # the two lines below would need to change when multi-classing is implemented
         char['classes'] = self.get_classes()[0]['class_name']
         char['level'] = self.get_classes()[0]['level']
 
@@ -174,7 +180,7 @@ class Character(db.Model):
             #create a set of spell_indexes from the restults of the api call
             new_spells = {result['index'] for result in results}
 
-         #add the spells to the set of available spells
+            #add the spells to the set of available spells
             available_spells.update(new_spells)
 
         if len(available_spells) == 0:
@@ -193,7 +199,6 @@ class Character(db.Model):
             for item in resp:
                 if item['level'] == _class['level'] and 'spellcasting' in item:
                     slots.append(item['spellcasting'])
-                    #slots[_class] = item['spellcasting']
     
         return slots
 
@@ -201,19 +206,23 @@ class Character(db.Model):
         '''Return the highest available spell slot to for this character'''
         # clean spellcasting dict of spell levels with no available spell slots
         highest_spell_level = 0
+
         for spell_slots in slots_by_class:
             for key in list(spell_slots.keys()):
                 if spell_slots[key] == 0 and 'spell_slot' in key:
                     del spell_slots[key]
+
                 elif 'spell_slot' in key:
                     highest_spell_level += 1
                     new_key = key.replace('_', ' ').title()
                     spell_slots[new_key] = spell_slots[key]
                     del spell_slots[key]
+
                 elif 'cantrip' in key:
                     new_key = key.replace('_', ' ').title()
                     spell_slots[new_key] = spell_slots[key]
                     del spell_slots[key]
+                    
         return highest_spell_level
     
     def get_spells_from_db(self, slots):
