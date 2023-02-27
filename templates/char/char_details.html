@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container char-name-container">
     <div class="row justify-content-start align-items-center">
-        <h1 id="char-name">{{char.name}}</h1> 
+        <h1 id="char-name">{{char.name}}</h1>
         {% if owner %}
         <a href="/char/{{char.id}}/edit"><i class="fa-solid fa-pen-to-square"></i></a>
         <form action="/char/{{char.id}}/delete" method="POST">
@@ -14,46 +14,55 @@
         {% endif %}
     </div>
     <div class="row char-class-name">
-                {% for _class in char.get_classes() %}
-                Level {{_class.level}} {{_class.class_name.capitalize()}}
-                {% if char.get_classes()|length > 1 %}, {% endif %}
-                {% endfor %}
+        {% for _class in char.get_classes() %}
+        Level {{_class.level}} {{_class.class_name.capitalize()}}
+        {% if char.get_classes()|length > 1 %}, {% endif %}
+        {% endfor %}
     </div>
 
 </div>
 <div class="container stats-spell-lists-container">
     <div class="row justify-content-start stats-container">
         <div class="col-4">
-            <div class="row"><h2>Stats</h2></div>
+            <div class="row">
+                <h2>Stats</h2>
+            </div>
             <div class="row">
                 {% for key, value in stats %}
-                    <div class="col stat stat-{{key}}"><span class="stat-key">{{key}}</span> {{value}}</div>
-                    {% if loop.last %}
-                    </div>
-                    {% elif loop.index is odd %}
-                    </div>
-                    <div class="row">
-                    {% endif %}
-                {% endfor %}
+                <div class="col stat stat-{{key}}"><span class="stat-key">{{key}}</span> {{value}}</div>
+                {% if loop.last %}
             </div>
-
-        <div class="col-4 offset-4">
-        <div class="row align-items-center justify-content-start spell-list-container">
-            <h2>Spell Lists</h2>
-            {% if owner %}
-            <a href="/char/{{char.id}}/spell_list/new" class="offset-2"><i class="fa-solid fa-plus add-button"></i></a>
-            {% endif %}
+            {% elif loop.index is odd %}
         </div>
         <div class="row">
-                {% if char.spell_lists|length > 0 %}
-                    {% for list in char.spell_lists %}
-                        <a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a>
-                    {% endfor %}
-                {% else %}
-                    <p>You have no spell lists for {{char.name.capitalize()}}</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="col-4 offset-4">
+            <div class="row align-items-center justify-content-start spell-list-container">
+                <h2>Spell Lists</h2>
+                {% if owner %}
+                <a href="/char/{{char.id}}/spell_list/new" class="offset-2"><i
+                        class="fa-solid fa-plus add-button"></i></a>
                 {% endif %}
+            </div>
+            <div class="row">
+                <ul>
+                    {% if char.spell_lists|length > 0 %}
+                    {% for list in char.spell_lists %}
+                    <li>
+                        <a href="/char/{{char.id}}/spell_list/{{list.id}}">{{list.name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="row">
+                    <p>You have no spell lists for {{char.name.capitalize()}}</p>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 
-{% endblock %}
+    {% endblock %}
