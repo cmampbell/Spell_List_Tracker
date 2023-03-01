@@ -1,6 +1,4 @@
-[**API**](https://www.dnd5eapi.co/ "API")
-
- # Spell List Creator #
+# Spell List Creator #
  https://spelllistcreator.onrender.com
 
 ## Project Description
